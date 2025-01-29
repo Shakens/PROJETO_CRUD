@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block page_title %}Tipo Sensor{% endblock page_title %}
+
+
+{% block content %}
+  <div class="table-responsive">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Tipo Sensor</h1>
+      <div>
+        <a href="{% url "tipo_sensor_create" %}" class="btn btn-primary">Adicionar Tipo Sensor</a>
+      </div>
+    </div>
+
+    {% if tipo_sensores %}
+      <table class="table table-striped">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Sigla</th>
+            <th scope="col">Descrição</th>
+            <th scope="col" class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tps in tipo_sensores %}
+            <tr>
+              <td>{{tps.nome}}</td>
+              <td>{{tps.sigla}}</td>
+              {% if tps.descricao %}
+                <td>{{tps.descricao}}</td>
+              {% else  %}
+                <td></td>
+              {%endif%}
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-2">
+                  <a href="{% url "tipo_sensor_detail" pk=tps.pk %}" class="btn btn-sm btn-info">Visualizar</a>
+                  <a href="{% url "tipo_sensor_update" pk=tps.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                  <a href="{% url "tipo_sensor_delete" pk=tps.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                </div>  
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else  %}
+      <p> Não há tipos de sensores cadastrados</p>
+    {%endif%}
+  </div>
+{% endblock  %}
+
+          
