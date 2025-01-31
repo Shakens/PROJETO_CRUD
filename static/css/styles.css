@@ -64,3 +64,16 @@
         padding: 10px 0;
     }
 }
+
+/* Estilo para o rodapé */
+/* Estilo para o rodapé */
+footer {
+    background-color: black; /* Cor preta de fundo */
+    color: white; /* Cor do texto branca */
+    padding: 20px;
+    text-align: center; /* Centraliza o texto */
+    position: fixed; /* Fixa o rodapé na parte inferior */
+    bottom: 0; /* Alinha o rodapé ao fundo da tela */
+    width: 100%; /* Garante que o rodapé ocupe toda a largura */
+    left: 0; /* Garante que o rodapé vá até a margem esquerda */
+}
