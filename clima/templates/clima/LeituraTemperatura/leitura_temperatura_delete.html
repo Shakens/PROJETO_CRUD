@@ -1,0 +1,28 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Excluir Leitura de Temperatura</h1>
+  
+  <p>Tem certeza de que deseja excluir esta leitura de temperatura?</p>
+
+  <table>
+    <tr>
+      <th>Sensor</th>
+      <td>{{ object.sensor.nome }}</td>
+    </tr>
+    <tr>
+      <th>Temperatura</th>
+      <td>{{ object.temperatura }}</td>
+    </tr>
+    <tr>
+      <th>Data de Leitura</th>
+      <td>{{ object.data_leitura }}</td>
+    </tr>
+  </table>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Exclusão</button>
+    <a href="{% url 'leitura_temperatura_list' %}">Cancelar</a>
+  </form>
+{% endblock %}

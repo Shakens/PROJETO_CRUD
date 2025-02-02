@@ -1,0 +1,13 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Criar Leitura de Temperatura</h1>
+  
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+
+  <p><a href="{% url 'leitura_temperatura_list' %}">Voltar para a lista de leituras</a></p>
+{% endblock %}
