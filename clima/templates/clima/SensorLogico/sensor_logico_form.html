@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}
+  {% if tipo_sensor.pk %}
+    Editar Tipo Sensor
+  {% else %}
+    Novo Tipo Sensor
+  {% endif %}
+{% endblock page_title %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      {% if tipo_sensor.pk %}
+        Atualizar Tipo Sensor
+      {% else %}
+        Cadastrar Tipo Sensor
+      {% endif %}
+    </h1>
+  </div>
+  
+  <form method="POST">
+    {% csrf_token %}
+    
+    <div class="row">
+      <div class="col-md-8">
+        <!-- Exibição do formulário com crispy -->
+        {{ form | crispy }}
+      </div>
+    </div>
+    
+    <div class="mt-3">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="{% url 'tipo_sensor_list' %}" class="btn btn-danger">Cancelar</a>
+    </div>
+  </form>
+{% endblock content %}

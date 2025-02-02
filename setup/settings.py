@@ -67,7 +67,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # Adicione aqui o diretório onde os templates personalizados estão, se necessário
-            BASE_DIR / 'templates',
+            BASE_DIR / 'templates/clima',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mydb',
         'USER': 'root',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'Brunna@2020*',
         'HOST': 'localhost',  # ou o endereço do seu servidor de banco
         'PORT': '3306',  # geralmente é a porta padrão do MySQL
     }
@@ -122,9 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Maceio'
 
 USE_I18N = True
 

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_title %}Exclusão Tipo Sensor{% endblock page_title %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Excluir Tipo de Sensor</h1>
+  </div>
+  
+  <div class="alert alert-danger" role="alert">
+    Tem certeza de que deseja excluir o tipo de sensor <strong>{{ tipo_sensor.nome }}</strong>?
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-danger">Excluir</button>
+      <a href="{% url 'tipo_sensor_list' %}" class="btn btn-primary">Cancelar</a>
+    </div>
+  </form>
+{% endblock content %}
