@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block page_title %}Detalhar Parâmetro{% endblock page_title %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Visualização de Parâmetro</h1>
+    </div>
+    <form>
+        <div class="row">
+            <div class="form-control-static w-100 me-3">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nome:</strong></label>
+                    <p class="form-control-static">{{ parametro.nome }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Valor:</strong></label>
+                    <p class="form-control-static">{{ parametro.valor }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Descrição:</strong></label>
+                    <p class="form-control-static">{{ parametro.descricao }}</p>
+                </div>
+            </div>
+        </div>
+    
+    <a href="{% url 'parametro_list' %}" class="btn btn-primary">Voltar</a>
+{% endblock content %}
