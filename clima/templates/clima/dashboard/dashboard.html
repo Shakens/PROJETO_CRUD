@@ -7,102 +7,76 @@
         <h1>Dashboard</h1>
         <p>Bem-vindo ao painel de controle!</p>
 
-        <!-- Exibindo cada sensor em um card -->
         <div class="row">
-            {% for sensor in sensores %}
-            <div class="col-md-4">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Sensor: {{ sensor.nome }}</div>
+            <!-- Card para a quantidade de Sensores -->
+            <div class="col-md-6">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Quantidade de Sensores</div>
                     <div class="card-body">
-                        <h5 class="card-title">Tipo: {{ sensor.tipo }}</h5>
-                        <p class="card-text">Última leitura: {{ sensor.ultima_leitura }}</p>
-                        <p class="card-text">Valor atual: {{ sensor.valor_atual }} °C</p>
-                        <a href="#" class="btn btn-light">Ver Detalhes</a>
+                        <h5 class="card-title">{{ total_sensores }}</h5>
+                        <p class="card-text">Sensores cadastrados no sistema.</p>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+
+            <!-- Card para a quantidade de Salas -->
+            <div class="col-md-6">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">Quantidade de Salas</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ total_salas }}</h5>
+                        <p class="card-text">Salas cadastradas no sistema.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Gráfico de Temperatura -->
-    <div class="container">
+    <div class="container mt-4">
         <h2>Gráfico de Temperatura</h2>
-        
-        <!-- Filtro de período -->
-        <div>
-            <button onclick="filtrarTemperatura('semana')">Última Semana</button>
-            <button onclick="filtrarTemperatura('mes')">Último Mês</button>
-        </div>
 
-        <!-- Exibindo o gráfico para cada sensor -->
-        <div class="row mt-4">
-            {% for sensor in sensores %}
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        Sensor: {{ sensor.nome }}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gráfico de Temperatura</h5>
-                        <canvas id="grafico_{{ sensor.pk }}" style="max-width: 100%; height: 400px;"></canvas>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+        <canvas id="graficoTemperatura" style="width: 600px; height: 400px;"></canvas>  <!-- Definindo tamanho fixo -->
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Função para filtrar e atualizar o gráfico
-        function filtrarTemperatura(periodo) {
-            fetch(`/temperatura/dados/?periodo=${periodo}`)  // Passando o filtro de período na URL
-                .then(response => response.json())
-                .then(data => {
-                    {% for sensor in sensores %}
-                    const ctx = document.getElementById('grafico_{{ sensor.pk }}').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                label: 'Temperatura (°C)',
-                                data: data.valores,
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 2
-                            }]
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Dados de Temperatura
+            var labels = {{ labels|safe }};  // Labels dos dados de temperatura
+            var valores = {{ valores|safe }};  // Valores das medições de temperatura
+
+            // Gráfico de Temperatura usando Chart.js
+            var ctx = document.getElementById('graficoTemperatura').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,  // Labels (data)
+                    datasets: [{
+                        label: 'Temperatura (°C)',
+                        data: valores,  // Valores das temperaturas
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Data'
+                            }
                         },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Data e Hora'
-                                    }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Temperatura (°C)'
-                                    }
-                                }
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
                             }
                         }
-                    });
-                    {% endfor %}
-                });
-        }
-
-        // Chama o gráfico inicialmente com dados sem filtro
-        filtrarTemperatura('semana');
-
-        // Atualiza automaticamente a cada 10 segundos
-        setInterval(() => {
-            filtrarTemperatura('semana');
-        }, 10000);  // 10 segundos
-    </script>
+                    }
+                }
+            });
+        </script>
+    </div>
 {% endblock %}

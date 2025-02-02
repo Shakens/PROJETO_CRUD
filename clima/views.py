@@ -1,13 +1,60 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from .models import TipoSensor, Sala  # Certifique-se de que o modelo correto é "Sala"
-from .forms import TipoSensorForm, SalaForm  # Certifique-se de que o nome do formulário está correto
-from django.http import HttpResponse
+from .models import TipoSensor, Sala, Parametro, LeituraTemperatura  # Incluindo LeituraTemperatura
+from .forms import TipoSensorForm, SalaForm, ParametroForm, LeituraTemperaturaForm
+from django.http import JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.utils import timezone
 
-# ===================== Função para retornar dados de temperatura =====================
+# ===================== Funções para dados de temperatura =====================
+
 def temperatura_dados(request):
-    return HttpResponse("Dados de temperatura")
+    """
+    Função para retornar os dados de temperatura no formato JSON
+    com base no parâmetro de filtro (semana ou mês).
+    """
+    periodo = request.GET.get('periodo', 'semana')  # Captura o parâmetro 'periodo' da URL
+    
+    # Exemplo de dados reais: podemos consultar a tabela LeituraTemperatura aqui
+    # Filtrando pelas últimas leituras de temperatura (exemplo)
+    if periodo == 'semana':
+        dados = LeituraTemperatura.objects.filter(data_leitura__gte='2025-01-29')  # Exemplo de filtro por data
+    elif periodo == 'mes':
+        dados = LeituraTemperatura.objects.filter(data_leitura__gte='2025-01-01')
+
+    # Preparando dados simulados ou reais
+    labels = [str(leitura.data_leitura.date()) for leitura in dados]  # Datas das leituras
+    valores = [leitura.temperatura for leitura in dados]  # Temperaturas das leituras
+    
+    return JsonResponse({'labels': labels, 'valores': valores})
+
+# ===================== Views para o Dashboard =====================
+
+def dashboard_view(request):
+    """
+    Função para o Dashboard, exibindo o total de sensores, salas e parâmetros,
+    além de gerar dados para o gráfico de temperatura.
+    """
+    # Consultando os totais
+    total_sensores = TipoSensor.objects.count()
+    total_salas = Sala.objects.count()
+    total_parametros = Parametro.objects.count()
+    
+    # Obter dados de temperatura simulados ou reais
+    # No caso real, aqui seria uma consulta ao modelo de leituras de temperatura
+    labels = ["2025-01-29", "2025-01-30", "2025-01-31"]
+    valores = [23, 24, 25]  # Simulando valores de temperatura para o gráfico
+
+    context = {
+        'title': 'Dashboard',
+        'total_sensores': total_sensores,
+        'total_salas': total_salas,
+        'total_parametros': total_parametros,
+        'labels': labels,
+        'valores': valores,
+    }
+
+    return render(request, 'clima/Dashboard/dashboard.html', context)
 
 # ===================== Views para Sensores =====================
 
@@ -46,22 +93,12 @@ class TipoSensorDeleteView(DeleteView):
     template_name = "clima/TipoSensor/tipo_sensor_delete.html"
     success_url = reverse_lazy("tipo_sensor_list")
 
-# ===================== View do Dashboard =====================
-
-def dashboard_view(request):
-    context = {
-        'title': 'Dashboard',
-        'total_sensores': TipoSensor.objects.count(),
-        'total_salas': Sala.objects.count(),  # Total de salas, se desejar incluir no dashboard
-    }
-    return render(request, 'clima/Dashboard/dashboard.html', context)
-
 # ===================== Views para Salas =====================
 
 class SalaListView(ListView):
     model = Sala
     template_name = 'clima/Sala/sala_list.html'
-    context_object_name = 'salas'  # Corrigido de 'sala' para 'salas', pois será uma lista
+    context_object_name = 'salas'
 
 class SalaCreateView(CreateView):
     model = Sala
@@ -88,3 +125,53 @@ class SalaDeleteView(DeleteView):
     template_name = "clima/Sala/sala_delete.html"
     success_url = reverse_lazy("sala_list")
 
+# ===================== Views para Parâmetros =====================
+
+class ParametroListView(ListView):
+    model = Parametro
+    context_object_name = "parametros"
+    template_name = "clima/Parametro/parametro_list.html"
+
+class ParametroCreateView(CreateView):
+    model = Parametro
+    form_class = ParametroForm
+    context_object_name = "parametro"
+    template_name = "clima/Parametro/parametro_form.html"
+    success_url = reverse_lazy("parametro_list")
+
+class ParametroUpdateView(UpdateView):
+    model = Parametro
+    form_class = ParametroForm
+    context_object_name = "parametro"
+    template_name = "clima/Parametro/parametro_form.html"
+    success_url = reverse_lazy("parametro_list")
+
+class ParametroDetailView(DetailView):
+    model = Parametro
+    context_object_name = "parametro"
+    template_name = "clima/Parametro/parametro_detail.html"
+
+class ParametroDeleteView(DeleteView):
+    model = Parametro
+    context_object_name = "parametro"
+    template_name = "clima/Parametro/parametro_delete.html"
+    success_url = reverse_lazy("parametro_list")
+
+# ===================== Views para Leitura de Temperatura =====================
+
+class LeituraTemperaturaCreateView(CreateView):
+    model = LeituraTemperatura
+    form_class = LeituraTemperaturaForm
+    context_object_name = "leitura_temperatura"
+    template_name = "clima/LeituraTemperatura/leitura_temperatura_form.html"
+    success_url = reverse_lazy("leitura_temperatura_list")
+
+class LeituraTemperaturaListView(ListView):
+    model = LeituraTemperatura
+    context_object_name = "leituras_temperatura"
+    template_name = "clima/LeituraTemperatura/leitura_temperatura_list.html"
+
+class LeituraTemperaturaDetailView(DetailView):
+    model = LeituraTemperatura
+    context_object_name = "leitura_temperatura"
+    template_name = "clima/LeituraTemperatura/leitura_temperatura_detail.html"

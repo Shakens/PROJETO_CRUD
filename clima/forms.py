@@ -1,7 +1,8 @@
 from django import forms
-from .models import TipoSensor, Sala  # Alterado para Salas
+from django.utils import timezone
+from .models import TipoSensor, Sala, Parametro, LeituraTemperatura  # Incluindo LeituraTemperatura
 
-
+# Formulário para TipoSensor
 class TipoSensorForm(forms.ModelForm):
     class Meta:
         model = TipoSensor
@@ -29,10 +30,10 @@ class TipoSensorForm(forms.ModelForm):
         return limite_inferior
 
 
-# Alterado para SalasForm
-class SalaForm(forms.ModelForm):  # Certifique-se de que está no plural
+# Formulário para Sala
+class SalaForm(forms.ModelForm):
     class Meta:
-        model = Sala  # Corrigido para Salas
+        model = Sala  # Modelo Sala
         fields = ['nome', 'descricao', 'capacidade', 'localizacao']
         widgets = {
             'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
@@ -54,3 +55,35 @@ class SalaForm(forms.ModelForm):  # Certifique-se de que está no plural
         localizacao = self.cleaned_data.get('localizacao')
         # Adicione validações adicionais para o campo de localização, se necessário
         return localizacao
+
+
+# Formulário para Parametro
+class ParametroForm(forms.ModelForm):
+    class Meta:
+        model = Parametro
+        fields = '__all__'  # Ou defina os campos específicos que deseja
+
+    # Se precisar de validação adicional para campos específicos de Parametro, adicione métodos aqui.
+
+
+# Formulário para Leitura de Temperatura
+class LeituraTemperaturaForm(forms.ModelForm):
+    class Meta:
+        model = LeituraTemperatura  # Modelo para leitura de temperatura
+        fields = ['sensor', 'temperatura', 'data_leitura']  # Adapte conforme necessário
+        widgets = {
+            'data_leitura': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Formato de data e hora
+            'temperatura': forms.NumberInput(attrs={'step': '0.01'}),  # Temperatura com casas decimais
+        }
+
+    def clean_temperatura(self):
+        temperatura = self.cleaned_data.get('temperatura')
+        if temperatura < -50 or temperatura > 100:
+            raise forms.ValidationError("A temperatura deve estar entre -50°C e 100°C.")
+        return temperatura
+
+    def clean_data_leitura(self):
+        data_leitura = self.cleaned_data.get('data_leitura')
+        if data_leitura > timezone.now():
+            raise forms.ValidationError("A data de leitura não pode ser no futuro.")
+        return data_leitura

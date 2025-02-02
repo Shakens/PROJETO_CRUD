@@ -9,11 +9,19 @@ from clima.views import (
     TipoSensorUpdateView,
     dashboard_view,
     temperatura_dados,
-    SalaCreateView,  # Corrigido para importar de clima.views
+    SalaCreateView,
     SalaUpdateView,
     SalaDetailView,
     SalaDeleteView,
-    SalaListView
+    SalaListView,
+    ParametroCreateView,
+    ParametroUpdateView,
+    ParametroDetailView,
+    ParametroDeleteView,
+    ParametroListView,
+    LeituraTemperaturaCreateView,
+    LeituraTemperaturaListView,
+    LeituraTemperaturaDetailView,
 )
 
 urlpatterns = [
@@ -40,4 +48,16 @@ urlpatterns = [
     path("salas/update/<int:pk>/", SalaUpdateView.as_view(), name="sala_update"),  # Atualização de sala
     path("salas/detail/<int:pk>/", SalaDetailView.as_view(), name="sala_detail"),  # Detalhes da sala
     path("salas/delete/<int:pk>/", SalaDeleteView.as_view(), name="sala_delete"),  # Exclusão de sala
+
+    # =================== Rotas para Parâmetros ===================
+    path("parametros/", ParametroListView.as_view(), name="parametro_list"),  # Lista de parâmetros
+    path("parametros/create/", ParametroCreateView.as_view(), name="parametro_create"),  # Criação de parâmetro
+    path("parametros/update/<int:pk>/", ParametroUpdateView.as_view(), name="parametro_update"),  # Atualização de parâmetro
+    path("parametros/detail/<int:pk>/", ParametroDetailView.as_view(), name="parametro_detail"),  # Detalhes do parâmetro
+    path("parametros/delete/<int:pk>/", ParametroDeleteView.as_view(), name="parametro_delete"),  # Exclusão de parâmetro
+
+    # =================== Rotas para Leitura de Temperatura ===================
+    path('leitura-temperatura/', LeituraTemperaturaListView.as_view(), name='leitura_temperatura_list'),  # Lista de leituras de temperatura
+    path('leitura-temperatura/create/', LeituraTemperaturaCreateView.as_view(), name='leitura_temperatura_create'),  # Criação de leitura de temperatura
+    path('leitura-temperatura/detail/<int:pk>/', LeituraTemperaturaDetailView.as_view(), name='leitura_temperatura_detail'),  # Detalhes da leitura de temperatura
 ]
