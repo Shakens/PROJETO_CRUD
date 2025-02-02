@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block page_title %}Formulário de Pavimento{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{% if pavimento %}Editar Pavimento{% else %}Novo Pavimento{% endif %}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{ pavimento.nome }}" required>
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ pavimento.descricao }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="andar">Andar:</label>
+                <input type="number" class="form-control" id="andar" name="andar" value="{{ pavimento.andar }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">{% if pavimento %}Salvar Alterações{% else %}Criar Pavimento{% endif %}</button>
+            <a href="{% url 'pavimento_list' %}" class="btn btn-secondary mt-3 ml-2">Cancelar</a>
+        </form>
+    </div>
+{% endblock %}

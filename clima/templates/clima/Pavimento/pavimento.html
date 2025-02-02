@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block page_title %}Pavimento{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Pavimentos</h1>
+
+        <!-- Se o pavimento existe, mostra o detalhe ou o formulário -->
+        {% if pavimento %}
+            <h2>{{ pavimento.nome }}</h2>
+            <p>{{ pavimento.descricao }}</p>
+            <p><strong>Andar:</strong> {{ pavimento.andar }}</p>
+            <a href="{% url 'pavimento_update' pavimento.id %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'pavimento_delete' pavimento.id %}" class="btn btn-danger">Excluir</a>
+            <a href="{% url 'pavimento_list' %}" class="btn btn-secondary">Voltar para a lista</a>
+
+        <!-- Se não existe pavimento, mostra a lista ou o formulário -->
+        {% else %}
+            <a href="{% url 'pavimento_create' %}" class="btn btn-primary mb-3">Adicionar Novo Pavimento</a>
+            
+            <!-- Exibe a lista de pavimentos -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pavimento in pavimentos %}
+                        <tr>
+                            <td>{{ pavimento.id }}</td>
+                            <td>{{ pavimento.nome }}</td>
+                            <td>
+                                <a href="{% url 'pavimento_detail' pavimento.id %}" class="btn btn-info btn-sm">Ver</a>
+                                <a href="{% url 'pavimento_update' pavimento.id %}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{% url 'pavimento_delete' pavimento.id %}" class="btn btn-danger btn-sm">Excluir</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">Nenhum pavimento encontrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
