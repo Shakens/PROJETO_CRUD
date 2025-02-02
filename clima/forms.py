@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, LeituraTemperatura  # Incluindo LeituraTemperatura
+from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento  # Incluindo Pavimento
 
 # Formulário para TipoSensor
 class TipoSensorForm(forms.ModelForm):
@@ -87,3 +87,30 @@ class LeituraTemperaturaForm(forms.ModelForm):
         if data_leitura > timezone.now():
             raise forms.ValidationError("A data de leitura não pode ser no futuro.")
         return data_leitura
+
+
+# Formulário para Pavimento
+class PavimentoForm(forms.ModelForm):
+    class Meta:
+        model = Pavimento
+        fields = ['nome', 'descricao', 'andar', 'localizacao']
+        widgets = {
+            'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+        }
+
+    def clean_nome(self):
+        nome = self.cleaned_data.get('nome')
+        if 'inválido' in nome.lower():
+            raise forms.ValidationError("O nome do pavimento não pode conter a palavra 'inválido'.")
+        return nome
+
+    def clean_andar(self):
+        andar = self.cleaned_data.get('andar')
+        if andar < 0:
+            raise forms.ValidationError("O andar não pode ser negativo.")
+        return andar
+
+    def clean_localizacao(self):
+        localizacao = self.cleaned_data.get('localizacao')
+        # Adicione validações adicionais para o campo de localização, se necessário
+        return localizacao

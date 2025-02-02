@@ -68,3 +68,17 @@ class LeituraTemperatura(models.Model):
     class Meta:
         verbose_name = "Leitura de Temperatura"
         verbose_name_plural = "Leituras de Temperatura"
+
+# Novo modelo Pavimento
+class Pavimento(models.Model):
+    nome = models.CharField(max_length=100, verbose_name="Nome do Pavimento")
+    descricao = models.TextField(verbose_name="Descrição")
+    andar = models.PositiveIntegerField(verbose_name="Número do Andar")  # Andar do pavimento
+    localizacao = models.CharField(max_length=100, verbose_name="Localização")
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Pavimento"
+        verbose_name_plural = "Pavimentos"

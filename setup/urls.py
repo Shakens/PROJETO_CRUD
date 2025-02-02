@@ -22,6 +22,11 @@ from clima.views import (
     LeituraTemperaturaCreateView,
     LeituraTemperaturaListView,
     LeituraTemperaturaDetailView,
+    PavimentoListView,  # Importando as views de Pavimento
+    PavimentoCreateView,
+    PavimentoUpdateView,
+    PavimentoDetailView,
+    PavimentoDeleteView,
 )
 
 urlpatterns = [
@@ -60,4 +65,11 @@ urlpatterns = [
     path('leitura-temperatura/', LeituraTemperaturaListView.as_view(), name='leitura_temperatura_list'),  # Lista de leituras de temperatura
     path('leitura-temperatura/create/', LeituraTemperaturaCreateView.as_view(), name='leitura_temperatura_create'),  # Criação de leitura de temperatura
     path('leitura-temperatura/detail/<int:pk>/', LeituraTemperaturaDetailView.as_view(), name='leitura_temperatura_detail'),  # Detalhes da leitura de temperatura
+
+    # =================== Rotas para Pavimentos ===================
+    path("pavimentos/", PavimentoListView.as_view(), name="pavimento_list"),  # Lista de pavimentos
+    path("pavimentos/create/", PavimentoCreateView.as_view(), name="pavimento_create"),  # Criação de pavimento
+    path("pavimentos/update/<int:pk>/", PavimentoUpdateView.as_view(), name="pavimento_update"),  # Atualização de pavimento
+    path("pavimentos/detail/<int:pk>/", PavimentoDetailView.as_view(), name="pavimento_detail"),  # Detalhes do pavimento
+    path("pavimentos/delete/<int:pk>/", PavimentoDeleteView.as_view(), name="pavimento_delete"),  # Exclusão de pavimento
 ]

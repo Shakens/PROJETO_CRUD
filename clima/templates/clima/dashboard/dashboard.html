@@ -3,7 +3,7 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container dashboard-content">
         <h1>Dashboard</h1>
         <p>Bem-vindo ao painel de controle!</p>
 
@@ -36,7 +36,8 @@
     <div class="container mt-4">
         <h2>Gráfico de Temperatura</h2>
 
-        <canvas id="graficoTemperatura" style="width: 600px; height: 400px;"></canvas>  <!-- Definindo tamanho fixo -->
+        <!-- Definindo um tamanho fixo para o gráfico -->
+        <canvas id="graficoTemperatura" style="width: 100px; height: 100px;"></canvas> <!-- Quadrado de 300x300px -->
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
@@ -60,7 +61,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: true,  // Garantindo que o gráfico se mantenha proporcional
                     scales: {
                         x: {
                             title: {

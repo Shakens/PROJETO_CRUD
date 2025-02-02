@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from .models import TipoSensor, Sala, Parametro, LeituraTemperatura  # Incluindo LeituraTemperatura
-from .forms import TipoSensorForm, SalaForm, ParametroForm, LeituraTemperaturaForm
+from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento  # Incluindo Pavimento
+from .forms import TipoSensorForm, SalaForm, ParametroForm, LeituraTemperaturaForm, PavimentoForm
 from django.http import JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.utils import timezone
@@ -175,3 +175,35 @@ class LeituraTemperaturaDetailView(DetailView):
     model = LeituraTemperatura
     context_object_name = "leitura_temperatura"
     template_name = "clima/LeituraTemperatura/leitura_temperatura_detail.html"
+
+# ===================== Views para Pavimentos =====================
+
+class PavimentoListView(ListView):
+    model = Pavimento
+    context_object_name = "pavimentos"
+    template_name = "clima/Pavimento/pavimento_list.html"
+
+class PavimentoCreateView(CreateView):
+    model = Pavimento
+    form_class = PavimentoForm
+    context_object_name = "pavimento"
+    template_name = "clima/Pavimento/pavimento_form.html"
+    success_url = reverse_lazy("pavimento_list")
+
+class PavimentoUpdateView(UpdateView):
+    model = Pavimento
+    form_class = PavimentoForm
+    context_object_name = "pavimento"
+    template_name = "clima/Pavimento/pavimento_form.html"
+    success_url = reverse_lazy("pavimento_list")
+
+class PavimentoDetailView(DetailView):
+    model = Pavimento
+    context_object_name = "pavimento"
+    template_name = "clima/Pavimento/pavimento_detail.html"
+
+class PavimentoDeleteView(DeleteView):
+    model = Pavimento
+    context_object_name = "pavimento"
+    template_name = "clima/Pavimento/pavimento_delete.html"
+    success_url = reverse_lazy("pavimento_list")
