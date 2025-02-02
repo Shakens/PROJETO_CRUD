@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block page_title %}Excluir Sala{% endblock page_title %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="h2">Excluir Sala</h1>
+    <div class="alert alert-danger" role="alert">
+      <strong>Tem certeza de que deseja excluir esta sala?</strong><br>
+      Sala: <strong>{{ sala.nome }}</strong><br>
+      Descrição: {{ sala.descricao }}<br>
+      Capacidade: {{ sala.capacidade }}<br>
+      Localização: {{ sala.localizacao }}<br>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'sala_list' %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <button type="submit" class="btn btn-danger">
+          <i class="fas fa-trash-alt"></i> Confirmar Exclusão
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
