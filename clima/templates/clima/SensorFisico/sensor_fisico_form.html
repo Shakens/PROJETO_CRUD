@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
+{% load crispy_forms_tags %}
 {% block page_title %}
   {% if sensor_fisico.pk %}
     Editar Sensor Físico
@@ -11,28 +11,26 @@
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      {% if sensor_fisico.pk %}
-        Atualizar Sensor Físico
-      {% else %}
-        Cadastrar Sensor Físico
-      {% endif %}
-    </h1>
+    {% if sensor_fisico.pk %}
+      <h1 class="h2">Atualizar Sensor Físico</h1>
+    {% else %}
+      <h1 class="h2">Cadastrar Sensor Físico</h1>
+    {% endif %}
   </div>
-  
+
+  <!-- Formulário de Cadastro e Edição -->
   <form method="POST">
     {% csrf_token %}
+    {{ form |crispy }}
     
-    <div class="row">
-      <div class="col-md-8">
-        <!-- Exibição do formulário com crispy -->
-        {{ form | crispy }}
-      </div>
-    </div>
-    
-    <div class="mt-3">
-      <button type="submit" class="btn btn-primary">Salvar</button>
-      <a href="{% url 'sensor_fisico_list' %}" class="btn btn-danger">Cancelar</a>
+    <!-- Botões -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button type="submit" class="btn btn-success btn-lg d-flex align-items-center justify-content-center">
+        <i class="fas fa-save me-2"></i> Salvar
+      </button>
+      <a href="{% url 'sensor_fisico_list' %}" class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center">
+        <i class="fas fa-times-circle me-2"></i> Cancelar
+      </a>
     </div>
   </form>
 {% endblock content %}

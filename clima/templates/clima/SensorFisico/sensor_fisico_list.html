@@ -6,11 +6,6 @@
   <div class="table-responsive">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Sensor Físico</h1>
-      <div>
-        <a href="{% url 'sensor_fisico_create' %}" class="btn btn-primary">
-          <i class="fas fa-plus-circle"></i> Adicionar Sensor Físico
-        </a>
-      </div>
     </div>
 
     {% if sensores_fisicos %}
@@ -18,9 +13,10 @@
         <thead class="table-light">
           <tr>
             <th scope="col">Nome</th>
+            <th scope="col">Sigla</th>
             <th scope="col">Descrição</th>
-            <th scope="col">Limite Inferior Permitido</th>
-            <th scope="col">Limite Superior Permitido</th>
+            <th scope="col">Tensão mínima</th>
+            <th scope="col">Tensão máxima</th>
             <th scope="col" class="text-end">Ações</th>
           </tr>
         </thead>
@@ -28,9 +24,10 @@
           {% for sensor in sensores_fisicos %}
             <tr>
               <td>{{ sensor.nome }}</td>
+              <td>{{ sensor.sigla }}</td>
               <td>{{ sensor.descricao|default:"-" }}</td>
-              <td>{{ sensor.limite_inferior }}</td>
-              <td>{{ sensor.limite_superior }}</td>
+              <td>{% if sensor.tensao_min %}{{ sensor.tensao_min|floatformat:2 }}{% else %}-{% endif %}</td>
+              <td>{% if sensor.tensao_max %}{{ sensor.tensao_max|floatformat:2 }}{% else %}-{% endif %}</td>
               <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
                   <a href="{% url 'sensor_fisico_detail' pk=sensor.pk %}" class="btn btn-sm btn-info">
@@ -38,7 +35,7 @@
                   </a>
                   <a href="{% url 'sensor_fisico_update' pk=sensor.pk %}" class="btn btn-sm btn-warning">
                     <i class="fas fa-edit"></i> Editar
-                  </a>
+                </a>               
                   <a href="{% url 'sensor_fisico_delete' pk=sensor.pk %}" class="btn btn-sm btn-danger">
                     <i class="fas fa-trash-alt"></i> Excluir
                   </a>
@@ -51,5 +48,12 @@
     {% else %}
       <p>Não há sensores físicos cadastrados.</p>
     {% endif %}
+
+    <!-- Botão "Adicionar Sensor Físico" na parte inferior -->
+    <div class="d-flex justify-content-center mt-4">
+      <a href="{% url 'sensor_fisico_create' %}" class="btn btn-lg btn-success">
+        <i class="fas fa-plus-circle"></i> Adicionar Sensor Físico
+      </a>          
+    </div>
   </div>
 {% endblock %}
