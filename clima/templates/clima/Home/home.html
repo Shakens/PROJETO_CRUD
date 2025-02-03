@@ -1,45 +1,87 @@
 {% extends "base.html" %}
 
-{% block page_title %}Tipo Sensor{% endblock page_title %}
+{% block page_title %}Página Inicial - IFS Monitor{% endblock %}
+
+{% load static %} 
 
 {% block content %}
-  <div class="table-responsive">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">IF Monitor</h1>
+  <div class="container mt-5">
+    <!-- Cabeçalho -->
+    <div class="row text-center mb-5">
+      <div class="col-md-12">
+        <h1 class="display-4 text-success">Bem-vindo ao IFS Monitor!</h1>
+        <p class="lead text-muted">O sistema inteligente para monitoramento de sensores em tempo real, garantindo o melhor desempenho e segurança para seus ambientes.</p>
+      </div>
     </div>
 
-    {% if tipo_sensores %}
-      <table class="table table-striped">
-        <thead class="table-light">
-          <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Sigla</th>
-            <th scope="col">Descrição</th>
-            <th scope="col" class="text-end">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for tps in tipo_sensores %}
-            <tr>
-              <td>{{ tps.nome }}</td>
-              <td>{{ tps.sigla }}</td>
-              <td>{{ tps.descricao|default:"Nenhuma descrição" }}</td>
-              <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
-                  <a href="{% url 'tipo_sensor_detail' pk=tps.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Visualizar</a>
-                  <a href="{% url 'tipo_sensor_update' pk=tps.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Editar</a>
-                  <a href="{% url 'tipo_sensor_delete' pk=tps.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Excluir</a>
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <!-- Caixa de mensagem caso não haja sensores cadastrados -->
-      <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i> Não há tipos de sensores cadastrados.
+    <!-- Blocos informativos -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm border-success">
+          <div class="card-body text-center">
+            <i class="fas fa-thermometer-half fa-3x text-success"></i>
+            <h5 class="card-title">Monitoramento de Sensores</h5>
+            <p class="card-text">Acompanhe os sensores em tempo real e verifique o status de cada um. Dados como temperatura e umidade são analisados constantemente.</p>
+          </div>
+        </div>
       </div>
-    {% endif %}
+
+      <div class="col-md-4">
+        <div class="card shadow-sm border-primary">
+          <div class="card-body text-center">
+            <i class="fas fa-wrench fa-3x text-primary"></i>
+            <h5 class="card-title">Desempenho Otimizado</h5>
+            <p class="card-text">O IFS Monitor otimiza o consumo de energia e recursos, garantindo que os sensores funcionem com o máximo desempenho e eficiência.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card shadow-sm border-warning">
+          <div class="card-body text-center">
+            <i class="fas fa-users fa-3x text-warning"></i>
+            <h5 class="card-title">Acessibilidade e Controle</h5>
+            <p class="card-text">O sistema oferece uma interface acessível para usuários de diferentes níveis, permitindo que qualquer pessoa possa monitorar e controlar os sensores com facilidade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Texto adicional para tornar a página mais interativa -->
+    <div class="row mb-5">
+      <div class="col-md-12 text-center">
+        <h3 class="text-primary">Por que escolher o IFS Monitor?</h3>
+        <p class="text-muted">Nosso sistema foi projetado para ser simples, eficiente e altamente confiável. A tecnologia por trás do IFS Monitor garante que você sempre tenha as informações necessárias para tomar decisões rápidas e precisas. Seja no gerenciamento de ambientes pequenos ou grandes, o IFS Monitor é a solução ideal para otimizar o desempenho e a segurança de seu espaço.</p>
+      </div>
+    </div>
+
+    <!-- Imagem ilustrativa e destaque para chamada à ação -->
+    <div class="row mb-4">
+      <div class="col-md-12 text-center">
+        <img src="{% static 'imagens/logo.png' %}" alt="Logo IFS Monitor" class="img-fluid" style="max-width: 200px;">
+        <h4 class="mt-4 text-dark">Explore as funcionalidades completas do sistema!</h4>
+        <p class="lead text-muted">Caso precise de mais informações ou queira explorar todas as funcionalidades do IFS Monitor, explore nosso sistema e descubra como ele pode otimizar seus ambientes.</p>
+      </div>
+    </div>
+
   </div>
+
+  <!-- Estilos personalizados -->
+  <style>
+    .card-body {
+      padding: 20px;
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .display-4 {
+      font-weight: bold;
+      color: #66BB6A;
+    }
+  </style>
+
 {% endblock %}
