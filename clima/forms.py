@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento  # Incluindo Pavimento
+from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio  # Incluindo Orientacao
 
 # Formulário para TipoSensor
 class TipoSensorForm(forms.ModelForm):
@@ -20,7 +20,6 @@ class TipoSensorForm(forms.ModelForm):
 
     def clean_descricao(self):
         descricao = self.cleaned_data.get("descricao")
-        # Se precisar de validação adicional, adicione aqui
         return descricao
 
     def clean_limite_inferior_permitido(self):
@@ -53,7 +52,6 @@ class SalaForm(forms.ModelForm):
 
     def clean_localizacao(self):
         localizacao = self.cleaned_data.get('localizacao')
-        # Adicione validações adicionais para o campo de localização, se necessário
         return localizacao
 
 
@@ -61,9 +59,7 @@ class SalaForm(forms.ModelForm):
 class ParametroForm(forms.ModelForm):
     class Meta:
         model = Parametro
-        fields = '__all__'  # Ou defina os campos específicos que deseja
-
-    # Se precisar de validação adicional para campos específicos de Parametro, adicione métodos aqui.
+        fields = '__all__'
 
 
 # Formulário para Leitura de Temperatura
@@ -112,5 +108,89 @@ class PavimentoForm(forms.ModelForm):
 
     def clean_localizacao(self):
         localizacao = self.cleaned_data.get('localizacao')
-        # Adicione validações adicionais para o campo de localização, se necessário
         return localizacao
+
+
+# Formulário para SensorFisico
+class SensorFisicoForm(forms.ModelForm):
+    class Meta:
+        model = SensorFisico
+        fields = ['tipo_sensor', 'sala', 'pavimento', 'localizacao', 'data_instalacao', 'ativo']
+        widgets = {
+            'data_instalacao': forms.DateInput(attrs={'type': 'date'}),  # Campo de data
+        }
+
+    def clean_localizacao(self):
+        localizacao = self.cleaned_data.get('localizacao')
+        if "inválido" in localizacao.lower():
+            raise forms.ValidationError("A localização não pode conter a palavra 'inválido'.")
+        return localizacao
+
+    def clean_data_instalacao(self):
+        data_instalacao = self.cleaned_data.get('data_instalacao')
+        if data_instalacao > timezone.now().date():
+            raise forms.ValidationError("A data de instalação não pode ser no futuro.")
+        return data_instalacao
+
+
+# Formulário para SensorLogico
+class SensorLogicoForm(forms.ModelForm):
+    class Meta:
+        model = SensorLogico
+        fields = ['tipo_sensor', 'sensor_fisico', 'descricao', 'ativo', 'data_instalacao']
+        widgets = {
+            'data_instalacao': forms.DateInput(attrs={'type': 'date'}),  # Campo de data
+        }
+
+    def clean_descricao(self):
+        descricao = self.cleaned_data.get('descricao')
+        if "inválido" in descricao.lower():
+            raise forms.ValidationError("A descrição não pode conter a palavra 'inválido'.")
+        return descricao
+
+    def clean_data_instalacao(self):
+        data_instalacao = self.cleaned_data.get('data_instalacao')
+        if data_instalacao > timezone.now().date():
+            raise forms.ValidationError("A data de instalação não pode ser no futuro.")
+        return data_instalacao
+
+
+# Formulário para Orientacao
+class OrientacaoForm(forms.ModelForm):
+    class Meta:
+        model = Orientacao
+        fields = ['nome', 'descricao']
+        widgets = {
+            'descricao': forms.Textarea(attrs={'rows': 3}),
+        }
+
+    def clean_nome(self):
+        nome = self.cleaned_data.get('nome')
+        if "inválido" in nome.lower():
+            raise forms.ValidationError("O nome da orientação não pode conter a palavra 'inválido'.")
+        return nome
+
+# Formulário para Relatorio
+class RelatorioForm(forms.Form):
+    nome_relatorio = forms.CharField(max_length=100)
+    descricao = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}))
+    data_inicio = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    data_fim = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+
+    def clean_nome_relatorio(self):
+        nome_relatorio = self.cleaned_data.get('nome_relatorio')
+        if 'inválido' in nome_relatorio.lower():
+            raise forms.ValidationError("O nome do relatório não pode conter a palavra 'inválido'.")
+        return nome_relatorio
+
+    def clean_data_inicio(self):
+        data_inicio = self.cleaned_data.get('data_inicio')
+        if data_inicio > timezone.now():
+            raise forms.ValidationError("A data de início não pode ser no futuro.")
+        return data_inicio
+
+    def clean_data_fim(self):
+        data_fim = self.cleaned_data.get('data_fim')
+        if data_fim > timezone.now():
+            raise forms.ValidationError("A data de fim não pode ser no futuro.")
+        return data_fim

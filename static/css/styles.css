@@ -46,6 +46,33 @@
     border-radius: 5px; /* Bordas arredondadas no hover */
 }
 
+/* Estilo para o menu dropdown */
+.nav-item.dropdown .dropdown-menu {
+    display: none; /* Esconde o menu dropdown por padrão */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px; /* Ajuste de largura para o menu */
+    background-color: #28a745; /* Cor de fundo verde */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.dropdown.show .dropdown-menu {
+    display: block; /* Exibe o menu dropdown quando o item for clicado */
+}
+
+.nav-item.dropdown .dropdown-item {
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.nav-item.dropdown .dropdown-item:hover {
+    background-color: #218838; /* Cor do hover para o item do dropdown */
+    border-radius: 5px; /* Bordas arredondadas no hover */
+}
+
 /* Responsividade para garantir a centralização no mobile */
 @media (max-width: 768px) {
     .navbar {
@@ -65,7 +92,6 @@
     }
 }
 
-/* Estilo para o rodapé */
 /* Estilo para o rodapé */
 footer {
     background-color: black; /* Cor preta de fundo */

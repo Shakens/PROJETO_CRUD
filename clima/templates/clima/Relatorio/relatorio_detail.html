@@ -1,0 +1,24 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Detalhes do Relatório</h1>
+  <table>
+    <tr>
+      <th>ID</th>
+      <td>{{ relatorio.id }}</td>
+    </tr>
+    <tr>
+      <th>Título</th>
+      <td>{{ relatorio.titulo }}</td>
+    </tr>
+    <tr>
+      <th>Data de Criação</th>
+      <td>{{ relatorio.data_criacao }}</td>
+    </tr>
+    <tr>
+      <th>Conteúdo</th>
+      <td>{{ relatorio.conteudo }}</td>
+    </tr>
+  </table>
+  <a href="{% url 'relatorio_list' %}">Voltar</a>
+{% endblock %}

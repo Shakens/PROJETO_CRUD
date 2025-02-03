@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Orientações</title>
+</head>
+<body>
+    <h1>Lista de Orientações</h1>
+    <a href="{% url 'orientacao_create' %}">Adicionar Nova Orientação</a>
+
+    <ul>
+        {% for orientacao in orientacoes %}
+            <li>
+                <a href="{% url 'orientacao_detail' orientacao.id %}">{{ orientacao.titulo }}</a> 
+                - 
+                <a href="{% url 'orientacao_delete' orientacao.id %}">Excluir</a>
+            </li>
+        {% empty %}
+            <p>Nenhuma orientação cadastrada.</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>

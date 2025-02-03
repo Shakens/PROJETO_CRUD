@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Excluir Relatório</h1>
+  <p>Você tem certeza que deseja excluir o relatório "{{ relatorio.titulo }}"?</p>
+  
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Exclusão</button>
+    <a href="{% url 'relatorio_list' %}">Cancelar</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Relatórios</h1>
+  <a href="{% url 'relatorio_create' %}">Criar Novo Relatório</a>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Data de Criação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for relatorio in relatorios %}
+        <tr>
+          <td>{{ relatorio.id }}</td>
+          <td>{{ relatorio.titulo }}</td>
+          <td>{{ relatorio.data_criacao }}</td>
+          <td>
+            <a href="{% url 'relatorio_detail' relatorio.id %}">Ver</a> |
+            <a href="{% url 'relatorio_update' relatorio.id %}">Editar</a> |
+            <a href="{% url 'relatorio_delete' relatorio.id %}">Excluir</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

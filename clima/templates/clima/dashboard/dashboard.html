@@ -81,3 +81,103 @@
         </script>
     </div>
 {% endblock %}
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container dashboard-content">
+        <h1>Dashboard</h1>
+        <p>Bem-vindo ao painel de controle!</p>
+
+        <div class="row">
+            <!-- Card para os Sensores -->
+            <div class="col-md-6">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Sensores Cadastrados</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% for sensor in sensores %}
+                                {{ sensor.nome }}<br> <!-- Exibe o nome de cada sensor -->
+                            {% empty %}
+                                Nenhum sensor cadastrado.
+                            {% endfor %}
+                        </h5>
+                        <p class="card-text">Lista de sensores cadastrados no sistema.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card para as Salas -->
+            <div class="col-md-6">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">Salas Cadastradas</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% for sala in salas %}
+                                {{ sala.nome }}<br> <!-- Exibe o nome de cada sala -->
+                            {% empty %}
+                                Nenhuma sala cadastrada.
+                            {% endfor %}
+                        </h5>
+                        <p class="card-text">Lista de salas cadastradas no sistema.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Gráficos -->
+    <div class="container mt-4">
+        <h2>Gráficos de Sensores</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Temperatura</h4>
+                <canvas id="graficoTemperatura"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h4>Umidade</h4>
+                <canvas id="graficoUmidade"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Dados de Temperatura e Umidade
+            var labels = {{ labels|safe }};
+            var temperaturas = {{ temperaturas|safe }};
+            var umidades = {{ umidades|safe }};
+
+            // Função para criar gráfico
+            function criarGrafico(id, label, data, cor) {
+                var ctx = document.getElementById(id).getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: data.length > 0 ? data : [0],  // Caso não haja dados, passamos um valor padrão de 0
+                            backgroundColor: cor + '0.2)',
+                            borderColor: cor + '1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Data' } },
+                            y: { title: { display: true, text: label } }
+                        }
+                    }
+                });
+            }
+
+            // Criando os gráficos
+            criarGrafico('graficoTemperatura', 'Temperatura (°C)', temperaturas, 'rgba(255, 99, 132,');
+            criarGrafico('graficoUmidade', 'Umidade (%)', umidades, 'rgba(54, 162, 235,');
+        </script>
+    </div>
+{% endblock %}

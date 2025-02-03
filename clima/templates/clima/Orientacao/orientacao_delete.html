@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excluir Orientação</title>
+</head>
+<body>
+    <h1>Excluir Orientação</h1>
+    <p>Tem certeza que deseja excluir a orientação: <strong>{{ orientacao.titulo }}</strong>?</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirmar Exclusão</button>
+    </form>
+
+    <a href="{% url 'orientacao_list' %}">Cancelar</a>
+</body>
+</html>
