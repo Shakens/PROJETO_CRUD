@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio  # Incluindo Orientacao
+from .models import TipoSensor, Sala, Parametro, LeituraSensor, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio, Leitura  # Incluindo Orientacao
 
 # Formulário para TipoSensor
 class TipoSensorForm(forms.ModelForm):
@@ -61,28 +61,6 @@ class ParametroForm(forms.ModelForm):
         model = Parametro
         fields = '__all__'
 
-
-# Formulário para Leitura de Temperatura
-class LeituraTemperaturaForm(forms.ModelForm):
-    class Meta:
-        model = LeituraTemperatura  # Modelo para leitura de temperatura
-        fields = ['sensor', 'temperatura', 'data_leitura']  # Adapte conforme necessário
-        widgets = {
-            'data_leitura': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Formato de data e hora
-            'temperatura': forms.NumberInput(attrs={'step': '0.01'}),  # Temperatura com casas decimais
-        }
-
-    def clean_temperatura(self):
-        temperatura = self.cleaned_data.get('temperatura')
-        if temperatura < -50 or temperatura > 100:
-            raise forms.ValidationError("A temperatura deve estar entre -50°C e 100°C.")
-        return temperatura
-
-    def clean_data_leitura(self):
-        data_leitura = self.cleaned_data.get('data_leitura')
-        if data_leitura > timezone.now():
-            raise forms.ValidationError("A data de leitura não pode ser no futuro.")
-        return data_leitura
 
 
 # Formulário para Pavimento
@@ -194,3 +172,21 @@ class RelatorioForm(forms.Form):
         if data_fim > timezone.now():
             raise forms.ValidationError("A data de fim não pode ser no futuro.")
         return data_fim
+
+#                Leitura Sendor
+class LeituraSensorForm(forms.ModelForm):
+    class Meta:
+        model = LeituraSensor
+        fields = ['sensor_logico', 'id_leitura', 'valor']  # Campos que o formulário irá exibir
+
+        widgets = {
+            'sensor_logico': forms.Select(attrs={'class': 'form-control'}),  # Para selecionar o sensor lógico
+            'id_leitura': forms.NumberInput(attrs={'class': 'form-control'}),  # Para inserir o ID da leitura
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),  # Para inserir o valor da leitura
+        }
+
+        #Leitura
+class LeituraForm(forms.ModelForm):
+    class Meta:
+        model = Leitura
+        fields = ['valor']  # Adicione os campos que você precisa (no exemplo, apenas o campo "valor")

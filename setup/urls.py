@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from clima import views  # Certifique-se de que suas views estão importadas corretamente
 from clima.views import (
     HomeListView,
     TipoSensorCreateView,
@@ -7,8 +8,6 @@ from clima.views import (
     TipoSensorDetailView,
     TipoSensorListView,
     TipoSensorUpdateView,
-    dashboard_view,
-    temperatura_dados,
     SalaCreateView,
     SalaUpdateView,
     SalaDetailView,
@@ -19,9 +18,6 @@ from clima.views import (
     ParametroDetailView,
     ParametroDeleteView,
     ParametroListView,
-    LeituraTemperaturaCreateView,
-    LeituraTemperaturaListView,
-    LeituraTemperaturaDetailView,
     PavimentoListView,  
     PavimentoCreateView,
     PavimentoUpdateView,
@@ -37,18 +33,19 @@ from clima.views import (
     SensorLogicoUpdateView,
     SensorLogicoDeleteView,
     SensorLogicoDetailView,
-    # Views de Orientação
     OrientacaoListView,
     OrientacaoCreateView,
     OrientacaoUpdateView,
     OrientacaoDetailView,
     OrientacaoDeleteView,
-    # Adicionando a view de relatório
     RelatorioListView,
     RelatorioCreateView, 
     RelatorioUpdateView,
     RelatorioDetailView,
-    RelatorioDeleteView
+    RelatorioDeleteView,
+    LeituraSensorListView,
+    LeituraSensorCreateView,  # Adicionando a view para criar leitura de sensor
+    LeituraCreateView
 )
 
 urlpatterns = [
@@ -61,13 +58,6 @@ urlpatterns = [
     path("sensor/update/<int:pk>/", TipoSensorUpdateView.as_view(), name="tipo_sensor_update"),
     path("sensor/delete/<int:pk>/", TipoSensorDeleteView.as_view(), name="tipo_sensor_delete"),
     path("sensor/detail/<int:pk>/", TipoSensorDetailView.as_view(), name="tipo_sensor_detail"),
-
-    # =================== Rota do Dashboard ===================
-    path("dashboard/", dashboard_view, name="dashboard"),
-
-    # =================== Rota do gráfico de temperatura ===================
-    path('temperatura/dados/', temperatura_dados, name='temperatura_dados'),
-    path('temperatura/dados/<int:sensor_id>/', temperatura_dados, name='temperatura_dados_sensor'),
 
     # =================== Rotas para Salas ===================
     path("salas/", SalaListView.as_view(), name="sala_list"),
@@ -82,11 +72,6 @@ urlpatterns = [
     path("parametros/update/<int:pk>/", ParametroUpdateView.as_view(), name="parametro_update"),
     path("parametros/detail/<int:pk>/", ParametroDetailView.as_view(), name="parametro_detail"),
     path("parametros/delete/<int:pk>/", ParametroDeleteView.as_view(), name="parametro_delete"),
-
-    # =================== Rotas para Leitura de Temperatura ===================
-    path('leitura-temperatura/', LeituraTemperaturaListView.as_view(), name='leitura_temperatura_list'),
-    path('leitura-temperatura/create/', LeituraTemperaturaCreateView.as_view(), name='leitura_temperatura_create'),
-    path('leitura-temperatura/detail/<int:pk>/', LeituraTemperaturaDetailView.as_view(), name='leitura_temperatura_detail'),
 
     # =================== Rotas para Pavimentos ===================
     path("pavimentos/", PavimentoListView.as_view(), name="pavimento_list"),
@@ -122,5 +107,11 @@ urlpatterns = [
     path("relatorio/update/<int:pk>/", RelatorioUpdateView.as_view(), name="relatorio_update"),
     path("relatorio/detail/<int:pk>/", RelatorioDetailView.as_view(), name="relatorio_detail"),
     path("relatorio/delete/<int:pk>/", RelatorioDeleteView.as_view(), name="relatorio_delete"),
+    path('relatorio/pdf/', views.gerar_relatorio, name='gerar_relatorio_pdf'),
 
+    # =================== Rotas para Leitura Sensor ===================
+    path("leitura-sensor/create/<int:pk>/leitura", LeituraSensorCreateView.as_view(), name="leitura_sensor_create"),  # Adicionando a rota para criação
+    path("leitura_sensor/", LeituraSensorListView.as_view(), name="leitura_sensor_list"),  # Rota para listar as leituras
+    #=========================Leitura================================
+    path('leitura/<int:sala_id>/criar/', LeituraCreateView.as_view(), name='criar_leitura'),
 ]

@@ -1,11 +1,10 @@
-{% extends 'base_generic.html' %}
-
+<!-- relatorio_form.html -->
+{% extends 'base.html' %}
 {% block content %}
-  <h1>{% if form.instance.pk %}Editar Relatório{% else %}Criar Novo Relatório{% endif %}</h1>
+  <h2>{% if object %}Editar{% else %}Criar{% endif %} Relatório</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{% if form.instance.pk %}Atualizar{% else %}Criar{% endif %}</button>
+    <button type="submit">Salvar</button>
   </form>
-  <a href="{% url 'relatorio_list' %}">Cancelar</a>
 {% endblock %}

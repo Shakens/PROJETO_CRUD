@@ -1,76 +1,22 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, LeituraTemperatura, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio
-from .forms import TipoSensorForm, SalaForm, ParametroForm, LeituraTemperaturaForm, PavimentoForm, SensorFisicoForm, SensorLogicoForm, OrientacaoForm, RelatorioForm
-
-# ===================== API para atualização de dados =====================
-
-def atualizar_dados(request):
-    """
-    Retorna os dados atualizados de temperatura e umidade no formato JSON
-    para atualização automática do dashboard.
-    """
-    leituras = LeituraTemperatura.objects.order_by('-data_leitura')[:10]  # Últimas 10 leituras
-    labels = [leitura.data_leitura.strftime("%d/%m %H:%M") for leitura in leituras]
-    temperaturas = [leitura.temperatura for leitura in leituras]
-    umidades = [leitura.umidade for leitura in leituras]
-
-    total_sensores = TipoSensor.objects.count()
-    total_salas = Sala.objects.count()
-
-    return JsonResponse({
-        "labels": labels,
-        "temperaturas": temperaturas,
-        "umidades": umidades,
-        "total_sensores": total_sensores,
-        "total_salas": total_salas,
-    })
-
-# ===================== API para dados de temperatura =====================
-
-def temperatura_dados(request):
-    """
-    Retorna os últimos dados de temperatura no formato JSON.
-    """
-    leituras = LeituraTemperatura.objects.order_by('-data_leitura')[:10]
-    dados = [{
-        "data": leitura.data_leitura.strftime("%d/%m %H:%M"),
-        "temperatura": leitura.temperatura,
-        "umidade": leitura.umidade,
-    } for leitura in leituras]
-    return JsonResponse({"leituras": dados})
+from .models import TipoSensor, Sala, Parametro, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio, LeituraSensor, Leitura
+from .forms import TipoSensorForm, SalaForm, ParametroForm, PavimentoForm, SensorFisicoForm, SensorLogicoForm, OrientacaoForm, LeituraSensorForm, RelatorioForm, LeituraForm
 
 # ===================== Dashboard =====================
-
 def dashboard_view(request):
-    """
-    Renderiza o dashboard exibindo totais e gráficos.
-    """
     total_sensores = TipoSensor.objects.count()
     total_salas = Sala.objects.count()
     total_parametros = Parametro.objects.count()
-
-    # Obtendo as últimas 10 leituras
-    leituras = LeituraTemperatura.objects.order_by('-data_leitura')[:10]
-    labels = [leitura.data_leitura.strftime("%d/%m %H:%M") for leitura in leituras]
-    valores = [leitura.temperatura for leitura in leituras]
-
-    context = {
-        'title': 'Dashboard',
-        'total_sensores': total_sensores,
-        'total_salas': total_salas,
-        'total_parametros': total_parametros,
-        'labels': labels,
-        'valores': valores,
-    }
-
-    return render(request, 'clima/Dashboard/dashboard.html', context)
+    return render(request, 'clima/Dashboard/dashboard.html')
 
 # ===================== Views para Sensores =====================
-
 class HomeListView(ListView):
     model = TipoSensor
     template_name = "clima/Home/home.html"
@@ -103,11 +49,10 @@ class TipoSensorDeleteView(DeleteView):
     success_url = reverse_lazy("tipo_sensor_list")
 
 # ===================== Views para Salas =====================
-
 class SalaListView(ListView):
     model = Sala
     template_name = 'clima/Sala/sala_list.html'
-    context_object_name = 'salas'
+    context_object_name = 'sala'
 
 class SalaCreateView(CreateView):
     model = Sala
@@ -131,7 +76,6 @@ class SalaDeleteView(DeleteView):
     success_url = reverse_lazy("sala_list")
 
 # ===================== Views para Parâmetros =====================
-
 class ParametroListView(ListView):
     model = Parametro
     template_name = "clima/Parametro/parametro_list.html"
@@ -158,25 +102,7 @@ class ParametroDeleteView(DeleteView):
     template_name = "clima/Parametro/parametro_delete.html"
     success_url = reverse_lazy("parametro_list")
 
-# ===================== Views para Leitura de Temperatura =====================
-
-class LeituraTemperaturaCreateView(CreateView):
-    model = LeituraTemperatura
-    form_class = LeituraTemperaturaForm
-    template_name = "clima/LeituraTemperatura/leitura_temperatura_form.html"
-    success_url = reverse_lazy("leitura_temperatura_list")
-
-class LeituraTemperaturaListView(ListView):
-    model = LeituraTemperatura
-    template_name = "clima/LeituraTemperatura/leitura_temperatura_list.html"
-    context_object_name = "leituras_temperatura"
-
-class LeituraTemperaturaDetailView(DetailView):
-    model = LeituraTemperatura
-    template_name = "clima/LeituraTemperatura/leitura_temperatura_detail.html"
-
 # ===================== Views para Pavimentos =====================
-
 class PavimentoListView(ListView):
     model = Pavimento
     template_name = "clima/Pavimento/pavimento_list.html"
@@ -204,7 +130,6 @@ class PavimentoDeleteView(DeleteView):
     success_url = reverse_lazy("pavimento_list")
 
 # ===================== Views para Sensor Físico =====================
-
 class SensorFisicoListView(ListView):
     model = SensorFisico
     template_name = 'clima/SensorFisico/sensor_fisico_list.html'
@@ -233,7 +158,6 @@ class SensorFisicoDeleteView(DeleteView):
     success_url = reverse_lazy('sensor_fisico_list')
 
 # ===================== Views para Sensor Lógico =====================
-
 class SensorLogicoListView(ListView):
     model = SensorLogico
     template_name = "clima/SensorLogico/sensor_logico_list.html"
@@ -262,7 +186,6 @@ class SensorLogicoDeleteView(DeleteView):
     success_url = reverse_lazy("sensor_logico_list")
 
 # ===================== Views para Orientação =====================
-
 class OrientacaoListView(ListView):
     model = Orientacao
     template_name = 'clima/Orientacao/orientacao_list.html'
@@ -291,7 +214,6 @@ class OrientacaoDeleteView(DeleteView):
     success_url = reverse_lazy('orientacao_list')
 
 # ===================== Views para Relatorio =====================
-
 class RelatorioListView(ListView):
     model = Relatorio
     template_name = 'clima/Relatorio/relatorio_list.html'
@@ -318,3 +240,51 @@ class RelatorioDeleteView(DeleteView):
     model = Relatorio
     template_name = 'clima/Relatorio/relatorio_delete.html'
     success_url = reverse_lazy('relatorio_list')
+
+# ===================== Views para Leitura Sensor =====================
+class LeituraSensorListView(ListView):
+    model = LeituraSensor
+    template_name = 'leitura_sensor/leitura_sensor_list.html'
+    context_object_name = 'leituras_sensores'
+
+class LeituraSensorCreateView(CreateView):
+    model = LeituraSensor
+    form_class = LeituraSensorForm
+    template_name = 'leitura_sensor/form.html'
+    success_url = reverse_lazy('listar_leitura_sensor')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+# ===================== Views para Leitura =====================
+class LeituraCreateView(CreateView):
+    model = Leitura
+    form_class = LeituraForm
+    template_name = 'clima/Leitura/leitura_form.html'
+    success_url = reverse_lazy('leitura_list')
+
+    def form_valid(self, form):
+        sala_id = self.kwargs['sala_id']
+        sala = get_object_or_404(Sala, id=sala_id)
+        form.instance.sala = sala
+        form.instance.data_hora = timezone.now()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('listar_leitura')
+
+# ===================== Gerar Relatório em PDF =====================
+def gerar_relatorio(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_leituras.pdf"'
+    p = canvas.Canvas(response, pagesize=letter)
+    p.setFont("Helvetica", 12)
+    p.drawString(100, 750, "Relatório de Leituras")
+    leituras = Leitura.objects.all()
+    y_position = 730
+    for leitura in leituras:
+        p.drawString(100, y_position, f"Data: {leitura.data_hora} | Valor: {leitura.valor}")
+        y_position -= 20
+    p.showPage()
+    p.save()
+    return response

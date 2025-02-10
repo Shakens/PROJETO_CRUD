@@ -1,24 +1,10 @@
-{% extends 'base_generic.html' %}
-
+<!-- relatorio_detail.html -->
+{% extends 'base.html' %}
 {% block content %}
-  <h1>Detalhes do Relatório</h1>
-  <table>
-    <tr>
-      <th>ID</th>
-      <td>{{ relatorio.id }}</td>
-    </tr>
-    <tr>
-      <th>Título</th>
-      <td>{{ relatorio.titulo }}</td>
-    </tr>
-    <tr>
-      <th>Data de Criação</th>
-      <td>{{ relatorio.data_criacao }}</td>
-    </tr>
-    <tr>
-      <th>Conteúdo</th>
-      <td>{{ relatorio.conteudo }}</td>
-    </tr>
-  </table>
+  <h2>Detalhes do Relatório</h2>
+  <p><strong>Nome:</strong> {{ relatorio.nome }}</p>
+  <p><strong>Descrição:</strong> {{ relatorio.descricao }}</p>
+  <a href="{% url 'relatorio_update' relatorio.id %}">Editar</a>
+  <a href="{% url 'relatorio_delete' relatorio.id %}">Excluir</a>
   <a href="{% url 'relatorio_list' %}">Voltar</a>
 {% endblock %}

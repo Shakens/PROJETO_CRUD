@@ -1,30 +1,240 @@
-{% extends 'base_generic.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1>Relatórios</h1>
-  <a href="{% url 'relatorio_create' %}">Criar Novo Relatório</a>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Título</th>
-        <th>Data de Criação</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for relatorio in relatorios %}
-        <tr>
-          <td>{{ relatorio.id }}</td>
-          <td>{{ relatorio.titulo }}</td>
-          <td>{{ relatorio.data_criacao }}</td>
-          <td>
-            <a href="{% url 'relatorio_detail' relatorio.id %}">Ver</a> |
-            <a href="{% url 'relatorio_update' relatorio.id %}">Editar</a> |
-            <a href="{% url 'relatorio_delete' relatorio.id %}">Excluir</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Container principal */
+    .relatorio-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Caixa de informações */
+    .info-box {
+      background-color: #5feba5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .info-box p {
+      font-size: 18px;
+      color: #000000;
+      margin: 0;
+    }
+
+    /* Formulário */
+    .relatorio-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    label {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    /* Botões */
+    .btn-pdf {
+      background-color: #0296d1;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-pdf:hover {
+      background-color: #01579b;
+    }
+  </style>
+
+  <div class="relatorio-container">
+    <h2 class="title">Gerar Relatório</h2>
+
+    <div class="info-box">
+      <p>Escolha o período para gerar o relatório.</p>
+    </div>
+
+    <form method="post" class="relatorio-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="dropdown">
+        <label for="periodo">Escolha o Período:</label>
+        <select name="periodo" id="periodo">
+          <option value="ultima_semana">Última Semana</option>
+          <option value="ultimo_mes">Último Mês</option>
+        </select>
+      </div>
+
+      <div class="buttons">
+        <button type="submit" class="btn-pdf">Gerar Relatório PDF</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Container principal */
+    .relatorio-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Caixa de informações */
+    .info-box {
+      background-color: #5feba5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .info-box p {
+      font-size: 18px;
+      color: #000000;
+      margin: 0;
+    }
+
+    /* Formulário */
+    .relatorio-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    label {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    /* Botões */
+    .btn-pdf {
+      background-color: #0296d1;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-pdf:hover {
+      background-color: #01579b;
+    }
+  </style>
+
+  <div class="relatorio-container">
+    <h2 class="title">Gerar Relatório</h2>
+
+    <div class="info-box">
+      <p>Escolha o período para gerar o relatório.</p>
+    </div>
+
+    <form method="post" class="relatorio-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="dropdown">
+        <label for="periodo">Escolha o Período:</label>
+        <select name="periodo" id="periodo">
+          <option value="ultima_semana">Última Semana</option>
+          <option value="ultimo_mes">Último Mês</option>
+        </select>
+      </div>
+
+      <div class="buttons">
+        <button type="submit" class="btn-pdf">Gerar Relatório PDF</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}

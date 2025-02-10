@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-
 # Modelo TipoSensor já existente
 class TipoSensor(models.Model):
     nome = models.CharField(max_length=100, verbose_name="Nome do Sensor")
@@ -55,19 +54,6 @@ class Parametro(models.Model):
     class Meta:
         verbose_name = "Parâmetro"
         verbose_name_plural = "Parâmetros"
-
-# Novo modelo LeituraTemperatura
-class LeituraTemperatura(models.Model):
-    sensor = models.ForeignKey(TipoSensor, on_delete=models.CASCADE)  # Relacionamento com TipoSensor
-    temperatura = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Temperatura")  # Temperatura
-    data_leitura = models.DateTimeField(default=timezone.now, verbose_name="Data da Leitura")  # Data e hora da leitura
-
-    def __str__(self):
-        return f"Leitura de {self.sensor.nome} em {self.data_leitura}"
-
-    class Meta:
-        verbose_name = "Leitura de Temperatura"
-        verbose_name_plural = "Leituras de Temperatura"
 
 # Novo modelo Pavimento
 class Pavimento(models.Model):
@@ -137,3 +123,27 @@ class Relatorio(models.Model):
     class Meta:
         verbose_name = "Relatório"
         verbose_name_plural = "Relatorios"
+
+#Leitura Sensor
+class LeituraSensor(models.Model):
+    sensor_logico = models.ForeignKey(SensorLogico, on_delete=models.CASCADE, verbose_name="Sensor Lógico")
+    id_leitura = models.IntegerField(verbose_name="ID da Leitura")
+    valor = models.FloatField(verbose_name="Valor da Leitura")
+    data = models.DateTimeField(auto_now_add=True, verbose_name="Data da Leitura")
+
+    def __str__(self):
+        return f"Leitura do Sensor Lógico {self.sensor_logico.id} em {self.data}"
+
+    class Meta:
+        verbose_name = "Leitura de Sensor"
+        verbose_name_plural = "Leituras de Sensores"
+
+#Leitura
+
+class Leitura(models.Model):
+    valor = models.FloatField()  # Exemplo de um campo de valor (ajuste conforme seu modelo)
+    sala = models.ForeignKey('Sala', on_delete=models.CASCADE)
+    data_hora = models.DateTimeField(default=timezone.now)  # Campo de data e hora
+
+    def __str__(self):
+        return f"Leitura {self.id} - {self.sala.nome} - {self.data_hora}"
