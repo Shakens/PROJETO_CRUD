@@ -6,7 +6,7 @@ from .models import TipoSensor, Sala, Parametro, LeituraSensor, Pavimento, Senso
 class TipoSensorForm(forms.ModelForm):
     class Meta:
         model = TipoSensor
-        fields = ['descricao', 'limite_inferior_permitido', 'limite_superior_permitido', 'unidade']  # Ajustado para os campos corretos
+        fields = ['descricao', 'limite_inferior_permitido', 'limite_superior_permitido', 'unidade']
         widgets = {
             'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
             'limite_inferior_permitido': forms.NumberInput(attrs={'step': '0.01'}),
@@ -34,7 +34,7 @@ class TipoSensorForm(forms.ModelForm):
 class SalaForm(forms.ModelForm):
     class Meta:
         model = Sala
-        fields = ['nome', 'sigla', 'id_pavimento', 'id_orientacao']  # Ajustado para os campos corretos
+        fields = ['nome', 'sigla', 'id_pavimento', 'id_orientacao']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
             'sigla': forms.TextInput(attrs={'class': 'form-control'}),
@@ -74,7 +74,7 @@ class PavimentoForm(forms.ModelForm):
 class SensorFisicoForm(forms.ModelForm):
     class Meta:
         model = SensorFisico
-        fields = ['nome', 'sigla', 'descricao', 'tensao_min', 'tensao_max']  # Ajustados para os campos corretos
+        fields = ['nome', 'sigla', 'descricao', 'tensao_min', 'tensao_max']
         widgets = {
             'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
             'tensao_min': forms.NumberInput(attrs={'step': '0.01'}),
@@ -102,7 +102,7 @@ class SensorFisicoForm(forms.ModelForm):
 class SensorLogicoForm(forms.ModelForm):
     class Meta:
         model = SensorLogico
-        fields = ['sensor_fisico', 'tipo', 'descricao']  # Ajustados para os campos corretos
+        fields = ['sensor_fisico', 'tipo', 'descricao']
         widgets = {
             'descricao': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -160,10 +160,10 @@ class RelatorioForm(forms.Form):
 class LeituraSensorForm(forms.ModelForm):
     class Meta:
         model = LeituraSensor
-        fields = ['sensor_logico', 'leitura', 'valor']  # Ajustado para os campos corretos
+        fields = ['sensor_logico', 'leitura', 'valor']
         widgets = {
             'sensor_logico': forms.Select(attrs={'class': 'form-control'}),
-            'leitura': forms.NumberInput(attrs={'class': 'form-control'}),
+            'leitura': forms.Select(attrs={'class': 'form-control'}),  # Mudança de NumberInput para Select
             'valor': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
@@ -172,7 +172,13 @@ class LeituraSensorForm(forms.ModelForm):
 class LeituraForm(forms.ModelForm):
     class Meta:
         model = Leitura
-        fields = ['sala', 'data_hora']  # Adicionando o campo 'sala' e 'data_hora'
+        fields = ['sala', 'data_hora']
         widgets = {
-            'data_hora': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Formato de data e hora
+            'data_hora': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+    def clean_data_hora(self):
+        data_hora = self.cleaned_data.get('data_hora')
+        if data_hora > timezone.now():
+            raise forms.ValidationError("A data e hora não podem ser no futuro.")
+        return data_hora

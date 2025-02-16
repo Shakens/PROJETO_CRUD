@@ -161,7 +161,7 @@ class SensorFisicoDeleteView(DeleteView):
 class SensorLogicoListView(ListView):
     model = SensorLogico
     template_name = "clima/SensorLogico/sensor_logico_list.html"
-    context_object_name = "sensor_logicos"
+    context_object_name = "sensor_logico"
 
 class SensorLogicoCreateView(CreateView):
     model = SensorLogico
