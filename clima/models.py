@@ -1,116 +1,90 @@
 from django.db import models
 from django.utils import timezone
-# Modelo TipoSensor já existente
+
+# Modelo TipoSensor
 class TipoSensor(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do Sensor")
-    sigla = models.CharField(max_length=10, verbose_name="Sigla")
-    descricao = models.TextField(verbose_name="Descrição")
-    limite_inferior_permitido = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="Limite Inferior Permitido"
-    )
+    id = models.AutoField(primary_key=True)
+    descricao = models.CharField(max_length=50, null=False)
+    limite_inferior_permitido = models.FloatField(null=False)
+    limite_superior_permitido = models.FloatField(null=False)
+    unidade = models.CharField(max_length=45, null=False)
 
     def __str__(self):
-        return self.nome
+        return f"{self.descricao} ({self.unidade})"
 
-    class Meta:
-        verbose_name = "Tipo de Sensor"
-        verbose_name_plural = "Tipos de Sensores"
-
-# Modelo Dashboard já existente
-class Dashboard(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do Dashboard")
-    descricao = models.TextField(verbose_name="Descrição")
-
-    def __str__(self):
-        return self.nome
-
-    class Meta:
-        verbose_name = "Dashboard"
-        verbose_name_plural = "Dashboards"
 
 # Alterado de Sala para Salas
 class Sala(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome da Sala")
-    descricao = models.TextField(verbose_name="Descrição")
-    capacidade = models.PositiveIntegerField(verbose_name="Capacidade da Sala")  # Usando PositiveIntegerField
-    localizacao = models.CharField(max_length=100, verbose_name="Localização")
-
-    def __str__(self):
-        return self.nome
+    id = models.AutoField(primary_key=True)  # Campo ID autoincrement
+    nome = models.CharField(max_length=150, null=False)  # Nome da sala (Obrigatório)
+    sigla = models.CharField(max_length=10, unique=True, null=False)  # Sigla única (Obrigatório)
+    
+    # Chaves estrangeiras para Pavimento e Orientação
+    id_pavimento = models.ForeignKey('Pavimento', on_delete=models.RESTRICT, null=True, db_column='id_pavimento')
+    id_orientacao = models.ForeignKey('Orientacao', on_delete=models.RESTRICT, null=True, db_column='id_orientacao')
 
     class Meta:
-        verbose_name = "Sala"
-        verbose_name_plural = "Salas"
+        db_table = 'tb_sala'  # Nome exato da tabela no MySQL
 
-# Modelo Parametro já existente
+    def __str__(self):
+        return f"{self.sigla} - {self.nome}"  # Exibe Sigla + Nome no Django Admin
+
+
+# Modelo Parametro
 class Parametro(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do Parâmetro")
-    unidade = models.CharField(max_length=20, verbose_name="Unidade de Medida")
-    descricao = models.TextField(verbose_name="Descrição", blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+    sensor_logico = models.ForeignKey(
+        'SensorLogico',  # Nome do modelo referenciado (ajuste se necessário)
+        on_delete=models.RESTRICT
+    )
+    nome = models.CharField(max_length=50)
+    valor = models.FloatField()
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome}: {self.valor}"
 
-    class Meta:
-        verbose_name = "Parâmetro"
-        verbose_name_plural = "Parâmetros"
 
 # Novo modelo Pavimento
 class Pavimento(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do Pavimento")
-    descricao = models.TextField(verbose_name="Descrição")
-    andar = models.PositiveIntegerField(verbose_name="Número do Andar")  # Andar do pavimento
-    localizacao = models.CharField(max_length=100, verbose_name="Localização")
+    id = models.AutoField(primary_key=True)
+    nome = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.nome
 
-    class Meta:
-        verbose_name = "Pavimento"
-        verbose_name_plural = "Pavimentos"
 
 # Novo modelo SensorFisico
 class SensorFisico(models.Model):
-    tipo_sensor = models.ForeignKey(TipoSensor, on_delete=models.CASCADE, verbose_name="Tipo de Sensor")
-    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, verbose_name="Sala")
-    pavimento = models.ForeignKey(Pavimento, on_delete=models.CASCADE, verbose_name="Pavimento")
-    localizacao = models.CharField(max_length=100, verbose_name="Localização")
-    data_instalacao = models.DateField(default=timezone.now, verbose_name="Data de Instalação")
-    ativo = models.BooleanField(default=True, verbose_name="Sensor Ativo")
+    id = models.AutoField(primary_key=True)
+    nome = models.CharField(max_length=50, null=False)
+    sigla = models.CharField(max_length=10, unique=True, null=False)
+    descricao = models.CharField(max_length=150, null=True, blank=True)
+    tensao_min = models.FloatField(null=False)
+    tensao_max = models.FloatField(null=False)
 
     def __str__(self):
-        return f"Sensor {self.tipo_sensor.nome} instalado em {self.sala.nome} - {self.pavimento.nome}"
+        return f"{self.nome} ({self.sigla})"
 
-    class Meta:
-        verbose_name = "Sensor Físico"
-        verbose_name_plural = "Sensores Físicos"
 
 # Novo modelo SensorLogico
 class SensorLogico(models.Model):
-    tipo_sensor = models.ForeignKey(TipoSensor, on_delete=models.CASCADE, verbose_name="Tipo de Sensor")
-    sensor_fisico = models.ForeignKey(SensorFisico, on_delete=models.CASCADE, verbose_name="Sensor Físico", related_name="logico")
-    descricao = models.CharField(max_length=255, verbose_name="Descrição")
-    ativo = models.BooleanField(default=True, verbose_name="Sensor Ativo")
-    data_instalacao = models.DateField(default=timezone.now, verbose_name="Data de Instalação")
+    id = models.AutoField(primary_key=True)
+    sensor_fisico = models.ForeignKey(SensorFisico, on_delete=models.RESTRICT)
+    tipo = models.ForeignKey(TipoSensor, on_delete=models.RESTRICT)
+    descricao = models.CharField(max_length=50, null=False)
 
     def __str__(self):
-        return f"Sensor Lógico {self.tipo_sensor.nome} relacionado ao {self.sensor_fisico}"
+        return f"{self.descricao} ({self.sensor_fisico.nome})"
 
-    class Meta:
-        verbose_name = "Sensor Lógico"
-        verbose_name_plural = "Sensores Lógicos"
 
 # Novo modelo Orientacao
 class Orientacao(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome da Orientação")
-    descricao = models.TextField(verbose_name="Descrição", blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+    nome = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.nome
 
-    class Meta:
-        verbose_name = "Orientação"
-        verbose_name_plural = "Orientações"
 
 # Novo modelo Relatorio
 class Relatorio(models.Model):
@@ -122,28 +96,25 @@ class Relatorio(models.Model):
 
     class Meta:
         verbose_name = "Relatório"
-        verbose_name_plural = "Relatorios"
+        verbose_name_plural = "Relatórios"
 
-#Leitura Sensor
+
+# Leitura Sensor
 class LeituraSensor(models.Model):
-    sensor_logico = models.ForeignKey(SensorLogico, on_delete=models.CASCADE, verbose_name="Sensor Lógico")
-    id_leitura = models.IntegerField(verbose_name="ID da Leitura")
-    valor = models.FloatField(verbose_name="Valor da Leitura")
-    data = models.DateTimeField(auto_now_add=True, verbose_name="Data da Leitura")
+    id = models.AutoField(primary_key=True)
+    sensor_logico = models.ForeignKey(SensorLogico, on_delete=models.RESTRICT, related_name="leituras_sensores")
+    leitura = models.ForeignKey('Leitura', on_delete=models.CASCADE, related_name="leituras_sensores")  # Correção aqui
+    valor = models.FloatField()
 
     def __str__(self):
-        return f"Leitura do Sensor Lógico {self.sensor_logico.id} em {self.data}"
+        return f"Leitura {self.leitura.id} - Sensor {self.sensor_logico.nome}: {self.valor}"
 
-    class Meta:
-        verbose_name = "Leitura de Sensor"
-        verbose_name_plural = "Leituras de Sensores"
 
-#Leitura
-
+# Leitura
 class Leitura(models.Model):
-    valor = models.FloatField()  # Exemplo de um campo de valor (ajuste conforme seu modelo)
-    sala = models.ForeignKey('Sala', on_delete=models.CASCADE)
-    data_hora = models.DateTimeField(default=timezone.now)  # Campo de data e hora
+    id = models.AutoField(primary_key=True)
+    sala = models.ForeignKey(Sala, on_delete=models.RESTRICT, related_name="leituras")
+    data_hora = models.DateTimeField(default=timezone.now)  # Correção aqui
 
     def __str__(self):
-        return f"Leitura {self.id} - {self.sala.nome} - {self.data_hora}"
+        return f"Leitura {self.id} - Sala {self.sala.nome} em {self.data_hora}"

@@ -6,17 +6,12 @@ from .models import TipoSensor, Sala, Parametro, LeituraSensor, Pavimento, Senso
 class TipoSensorForm(forms.ModelForm):
     class Meta:
         model = TipoSensor
-        fields = ["nome", "sigla", "descricao", "limite_inferior_permitido"]
+        fields = ['descricao', 'limite_inferior_permitido', 'limite_superior_permitido', 'unidade']  # Ajustado para os campos corretos
         widgets = {
-            "descricao": forms.Textarea(attrs={"rows": 3, "cols": 50}),
-            "limite_inferior_permitido": forms.NumberInput(attrs={"step": "0.01"}),  # Campo numérico com precisão decimal
+            'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+            'limite_inferior_permitido': forms.NumberInput(attrs={'step': '0.01'}),
+            'limite_superior_permitido': forms.NumberInput(attrs={'step': '0.01'}),
         }
-
-    def clean_nome(self):
-        nome = self.cleaned_data.get("nome")
-        if "inválido" in nome.lower():
-            raise forms.ValidationError("O tipo de sensor não pode conter a palavra 'inválido'.")
-        return nome
 
     def clean_descricao(self):
         descricao = self.cleaned_data.get("descricao")
@@ -28,14 +23,21 @@ class TipoSensorForm(forms.ModelForm):
             raise forms.ValidationError("O limite inferior permitido não pode ser negativo.")
         return limite_inferior
 
+    def clean_limite_superior_permitido(self):
+        limite_superior = self.cleaned_data.get("limite_superior_permitido")
+        if limite_superior < 0:
+            raise forms.ValidationError("O limite superior permitido não pode ser negativo.")
+        return limite_superior
+
 
 # Formulário para Sala
 class SalaForm(forms.ModelForm):
     class Meta:
-        model = Sala  # Modelo Sala
-        fields = ['nome', 'descricao', 'capacidade', 'localizacao']
+        model = Sala
+        fields = ['nome', 'sigla', 'id_pavimento', 'id_orientacao']  # Ajustado para os campos corretos
         widgets = {
-            'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'sigla': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_nome(self):
@@ -43,16 +45,6 @@ class SalaForm(forms.ModelForm):
         if 'inválido' in nome.lower():
             raise forms.ValidationError("O nome da sala não pode conter a palavra 'inválido'.")
         return nome
-
-    def clean_capacidade(self):
-        capacidade = self.cleaned_data.get('capacidade')
-        if capacidade < 0:
-            raise forms.ValidationError("A capacidade não pode ser negativa.")
-        return capacidade
-
-    def clean_localizacao(self):
-        localizacao = self.cleaned_data.get('localizacao')
-        return localizacao
 
 
 # Formulário para Parametro
@@ -62,14 +54,13 @@ class ParametroForm(forms.ModelForm):
         fields = '__all__'
 
 
-
 # Formulário para Pavimento
 class PavimentoForm(forms.ModelForm):
     class Meta:
         model = Pavimento
-        fields = ['nome', 'descricao', 'andar', 'localizacao']
+        fields = ['nome']
         widgets = {
-            'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_nome(self):
@@ -78,68 +69,58 @@ class PavimentoForm(forms.ModelForm):
             raise forms.ValidationError("O nome do pavimento não pode conter a palavra 'inválido'.")
         return nome
 
-    def clean_andar(self):
-        andar = self.cleaned_data.get('andar')
-        if andar < 0:
-            raise forms.ValidationError("O andar não pode ser negativo.")
-        return andar
-
-    def clean_localizacao(self):
-        localizacao = self.cleaned_data.get('localizacao')
-        return localizacao
-
 
 # Formulário para SensorFisico
 class SensorFisicoForm(forms.ModelForm):
     class Meta:
         model = SensorFisico
-        fields = ['tipo_sensor', 'sala', 'pavimento', 'localizacao', 'data_instalacao', 'ativo']
+        fields = ['nome', 'sigla', 'descricao', 'tensao_min', 'tensao_max']  # Ajustados para os campos corretos
         widgets = {
-            'data_instalacao': forms.DateInput(attrs={'type': 'date'}),  # Campo de data
+            'descricao': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+            'tensao_min': forms.NumberInput(attrs={'step': '0.01'}),
+            'tensao_max': forms.NumberInput(attrs={'step': '0.01'}),
         }
 
-    def clean_localizacao(self):
-        localizacao = self.cleaned_data.get('localizacao')
-        if "inválido" in localizacao.lower():
-            raise forms.ValidationError("A localização não pode conter a palavra 'inválido'.")
-        return localizacao
+    def clean_descricao(self):
+        descricao = self.cleaned_data.get('descricao')
+        return descricao
 
-    def clean_data_instalacao(self):
-        data_instalacao = self.cleaned_data.get('data_instalacao')
-        if data_instalacao > timezone.now().date():
-            raise forms.ValidationError("A data de instalação não pode ser no futuro.")
-        return data_instalacao
+    def clean_tensao_min(self):
+        tensao_min = self.cleaned_data.get('tensao_min')
+        if tensao_min < 0:
+            raise forms.ValidationError("A tensão mínima não pode ser negativa.")
+        return tensao_min
+
+    def clean_tensao_max(self):
+        tensao_max = self.cleaned_data.get('tensao_max')
+        if tensao_max < 0:
+            raise forms.ValidationError("A tensão máxima não pode ser negativa.")
+        return tensao_max
 
 
 # Formulário para SensorLogico
 class SensorLogicoForm(forms.ModelForm):
     class Meta:
         model = SensorLogico
-        fields = ['tipo_sensor', 'sensor_fisico', 'descricao', 'ativo', 'data_instalacao']
+        fields = ['sensor_fisico', 'tipo', 'descricao']  # Ajustados para os campos corretos
         widgets = {
-            'data_instalacao': forms.DateInput(attrs={'type': 'date'}),  # Campo de data
+            'descricao': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_descricao(self):
         descricao = self.cleaned_data.get('descricao')
-        if "inválido" in descricao.lower():
+        if 'inválido' in descricao.lower():
             raise forms.ValidationError("A descrição não pode conter a palavra 'inválido'.")
         return descricao
-
-    def clean_data_instalacao(self):
-        data_instalacao = self.cleaned_data.get('data_instalacao')
-        if data_instalacao > timezone.now().date():
-            raise forms.ValidationError("A data de instalação não pode ser no futuro.")
-        return data_instalacao
 
 
 # Formulário para Orientacao
 class OrientacaoForm(forms.ModelForm):
     class Meta:
         model = Orientacao
-        fields = ['nome', 'descricao']
+        fields = ['nome']
         widgets = {
-            'descricao': forms.Textarea(attrs={'rows': 3}),
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_nome(self):
@@ -147,6 +128,7 @@ class OrientacaoForm(forms.ModelForm):
         if "inválido" in nome.lower():
             raise forms.ValidationError("O nome da orientação não pode conter a palavra 'inválido'.")
         return nome
+
 
 # Formulário para Relatorio
 class RelatorioForm(forms.Form):
@@ -173,20 +155,24 @@ class RelatorioForm(forms.Form):
             raise forms.ValidationError("A data de fim não pode ser no futuro.")
         return data_fim
 
-#                Leitura Sendor
+
+# Formulário para LeituraSensor
 class LeituraSensorForm(forms.ModelForm):
     class Meta:
         model = LeituraSensor
-        fields = ['sensor_logico', 'id_leitura', 'valor']  # Campos que o formulário irá exibir
-
+        fields = ['sensor_logico', 'leitura', 'valor']  # Ajustado para os campos corretos
         widgets = {
-            'sensor_logico': forms.Select(attrs={'class': 'form-control'}),  # Para selecionar o sensor lógico
-            'id_leitura': forms.NumberInput(attrs={'class': 'form-control'}),  # Para inserir o ID da leitura
-            'valor': forms.NumberInput(attrs={'class': 'form-control'}),  # Para inserir o valor da leitura
+            'sensor_logico': forms.Select(attrs={'class': 'form-control'}),
+            'leitura': forms.NumberInput(attrs={'class': 'form-control'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-        #Leitura
+
+# Formulário para Leitura
 class LeituraForm(forms.ModelForm):
     class Meta:
         model = Leitura
-        fields = ['valor']  # Adicione os campos que você precisa (no exemplo, apenas o campo "valor")
+        fields = ['sala', 'data_hora']  # Adicionando o campo 'sala' e 'data_hora'
+        widgets = {
+            'data_hora': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Formato de data e hora
+        }
