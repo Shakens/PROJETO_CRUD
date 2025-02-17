@@ -46,6 +46,13 @@
     {% else %}
       <p> Não há tipos de sensores cadastrados.</p>
     {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
     <!-- Botão "Adicionar Tipo Sensor" na parte inferior -->
     <div class="d-flex justify-content-center mt-4">

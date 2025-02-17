@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from reportlab.pdfgen import canvas
@@ -46,8 +48,18 @@ class TipoSensorDetailView(DetailView):
 
 class TipoSensorDeleteView(DeleteView):
     model = TipoSensor
-    template_name = "clima/TipoSensor/tipo_sensor_delete.html"
-    success_url = reverse_lazy("tipo_sensor_list")
+    template_name = 'clima/TipoSensor/tipo_sensor_delete.html'
+    success_url = reverse_lazy('tipo_sensor_list')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        
+        # Verifica se há Sensores Lógicos vinculados
+        if SensorLogico.objects.filter(tipo=self.object).exists():
+            messages.error(request, "❌ Este Tipo de Sensor não pode ser excluído porque está vinculado a um ou mais Sensores Lógicos.")
+            return redirect('tipo_sensor_list')  # Redireciona de volta para a lista
+        
+        return super().post(request, *args, **kwargs)
 
 # ===================== Views para Salas =====================
 class SalaListView(ListView):
