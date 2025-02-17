@@ -3,13 +3,15 @@
 {% block page_title %}Excluir Pavimento{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>Confirmar Exclusão</h1>
-        <p>Você tem certeza de que deseja excluir o pavimento "{{ pavimento.nome }}"?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Excluir</button>
-            <a href="{% url 'pavimento_list' %}" class="btn btn-secondary ml-2">Cancelar</a>
-        </form>
-    </div>
-{% endblock %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Excluir Pavimento</strong></h1>
+  </div>
+  <div class="alert alert-danger" role="alert">
+    Tem certeza de que deseja excluir o Pavimento <strong>{{pavimento.pavimento}}</strong>?
+  </div>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a href="{% url "pavimento_list" %}" class="btn btn-primary">Cancelar</a>
+  </form>
+{% endblock content %}
