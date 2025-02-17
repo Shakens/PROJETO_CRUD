@@ -2,3 +2,5 @@
 .venv
 settings.py
 *.pyc
+**/migrations/*
+!**/migrations/__init__.py
