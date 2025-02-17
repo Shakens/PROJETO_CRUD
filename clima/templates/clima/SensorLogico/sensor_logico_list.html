@@ -1,54 +1,55 @@
 {% extends "base.html" %}
 
-{% block page_title %}Tipo Sensor{% endblock page_title %}
+{% block page_title %}Sensor Lógico{% endblock page_title %}
 
 {% block content %}
   <div class="table-responsive">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">Tipo Sensor</h1>
-      <div>
-        <a href="{% url 'tipo_sensor_create' %}" class="btn btn-primary">
-          <i class="fas fa-plus-circle"></i> Adicionar Tipo Sensor
-        </a>
-      </div>
+      <h1 class="h2">Sensores Lógicos</h1>
     </div>
 
-    {% if tipo_sensores %}
+    {% if sensor_logicos %}
       <table class="table table-striped">
         <thead class="table-light">
           <tr>
-            <th scope="col">Nome Descrição</th>
-            <th scope="col">Limite Inferior Permitido</th>
-            <th scope="col">Limite Superior Permitido</th>
-            <th scope="col">Umidade</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Sensor Físico</th>
+            <th scope="col">Tipo de Sensor</th>
             <th scope="col" class="text-end">Ações</th>
           </tr>
         </thead>
         <tbody>
-          {% for tps in tipo_sensores %}
+          {% for sensor in sensor_logicos %}
             <tr>
-              <td>{{ tps.nome }}</td>
-              <td>{{ tps.sigla }}</td>
-              <td>{{ tps.descricao|default:"-" }}</td>
+              <td>{{ sensor.descricao }}</td>
+              <td>{{ sensor.sensor_fisico.nome }}</td>
+              <td>{{ sensor.tipo.nome }}</td>
               <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
-                  <a href="{% url 'tipo_sensor_detail' pk=tps.pk %}" class="btn btn-sm btn-info">
+                  <a href="{% url 'sensor_logico_detail' pk=sensor.pk %}" class="btn btn-sm btn-info">
                     <i class="fas fa-eye"></i> Visualizar
                   </a>
-                  <a href="{% url 'tipo_sensor_update' pk=tps.pk %}" class="btn btn-sm btn-warning">
+                  <a href="{% url 'sensor_logico_update' pk=sensor.pk %}" class="btn btn-sm btn-warning">
                     <i class="fas fa-edit"></i> Editar
                   </a>
-                  <a href="{% url 'tipo_sensor_delete' pk=tps.pk %}" class="btn btn-sm btn-danger">
+                  <a href="{% url 'sensor_logico_delete' pk=sensor.pk %}" class="btn btn-sm btn-danger">
                     <i class="fas fa-trash-alt"></i> Excluir
                   </a>
-                </div>  
+                </div>
               </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <p>Não há tipos de sensores cadastrados.</p>
+      <p>Não há Sensores Lógicos cadastrados.</p>
     {% endif %}
+    
+    <!-- Botão "Adicionar Sensor Lógico" na parte inferior -->
+    <div class="d-flex justify-content-center mt-4">
+      <a href="{% url 'sensor_logico_create' %}" class="btn btn-lg btn-success">
+        <i class="fas fa-plus-circle"></i> Adicionar Sensor Lógico
+      </a>
+    </div>
   </div>
 {% endblock %}

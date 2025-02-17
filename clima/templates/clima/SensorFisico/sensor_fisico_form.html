@@ -25,12 +25,10 @@
     
     <!-- Botões -->
     <div class="d-flex justify-content-center gap-3 mt-4">
-      <button type="submit" class="btn btn-success btn-lg d-flex align-items-center justify-content-center">
-        <i class="fas fa-save me-2"></i> Salvar
-      </button>
-      <a href="{% url 'sensor_fisico_list' %}" class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center">
-        <i class="fas fa-times-circle me-2"></i> Cancelar
-      </a>
+      <div class="d-flex justify-content-center mt-4 gap-3">
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="{% url 'sensor_fisico_list' %}" class="btn btn-secondary">Cancelar</a>
+      </div>
     </div>
   </form>
 {% endblock content %}

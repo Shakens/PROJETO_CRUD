@@ -1,143 +1,130 @@
 /* Estilo para a barra de navegação (header) */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #66BB6A; /* Verde claro */
-    padding: 10px 20px; /* Mais espaçamento para balancear */
-    z-index: 1000;
-    position: sticky; /* Fixa o cabeçalho no topo */
-    top: 0; /* Fixa o cabeçalho no topo */
-    width: 100%; /* Garante que o cabeçalho ocupe toda a largura */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #66BB6A; /* Verde claro */
+  transition: background-color 0.5s ease;
+  padding: 10px 20px;
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Alinhar o nome no canto esquerdo */
 .navbar-brand-container {
-    display: flex;
-    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
-    align-items: center; /* Garante que a imagem e o texto fiquem alinhados */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-/* Estilo para o nome da marca */
 .navbar-brand {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    text-align: left; /* Alinha o texto à esquerda */
-    margin: 0;
-    text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
 }
 
-/* Estilo para os ícones */
 .navbar-nav .nav-link i {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
-/* Estilo para os links de navegação */
 .navbar-nav .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 8px 16px; /* Adiciona um pouco de padding para melhorar a área de clique */
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s ease; /* Transição suave para a cor de fundo */
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
 .navbar-nav .nav-link:hover {
-    background-color: #a4c9aa; /* Verde mais suave no hover */
-    border-radius: 5px; /* Bordas arredondadas no hover */
+  background-color: #a4c9aa;
+  border-radius: 5px;
 }
 
-/* Estilo da imagem do logo */
 .navbar-brand-container img {
-    width: 40px; /* Imagem menor */
-    height: auto; /* Mantém a proporção da imagem */
-    margin-right: 10px; /* Espaço entre a imagem e o nome */
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
 }
 
-/* Responsividade para garantir a centralização no mobile */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
-    .navbar-brand {
-        font-size: 18px;
-        text-align: center; /* Centraliza o texto no mobile */
-    }
-    .navbar-nav {
-        width: 100%;
-        text-align: center; /* Garante que os links fiquem centralizados no mobile */
-    }
-    .navbar-nav .nav-link {
-        padding: 10px 0;
-    }
-}
-
-/* Estilo para o rodapé fixo */
-footer {
-    background-color: black; /* Cor preta de fundo */
-    color: white; /* Cor do texto branca */
-    padding: 10px; /* Tamanho do cabeçalho */
-    text-align: center; /* Centraliza o texto */
-    position: fixed; /* Fixa o rodapé na tela */
-    bottom: 0; /* Fixa o rodapé na parte inferior */
-    width: 100%; /* Garante que o rodapé ocupe toda a largura */
-    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    z-index: 999; /* Garantir que o rodapé esteja acima de outros elementos */
-}
-
-/* Ajustar o conteúdo para não ficar oculto atrás do rodapé fixo */
-body {
-    padding-bottom: 50px; /* Garante que o conteúdo não sobreponha o rodapé */
-}
-
-/* Estilizando o Dropdown */
-.navbar .dropdown-menu {
-    background: #b4dfb6; /* Cor verde suave combinando com a paleta */
-    border-radius: 10px; /* Bordas arredondadas */
-    border: none;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra elegante */
-    padding: 8px 0;
-}
-
-/* Ajuste do espaço interno */
-.navbar .dropdown-item {
-    color: #333; /* Cor do texto mais escura para contraste */
-    padding: 10px 20px;
-    transition: background 0.3s ease-in-out;
-    display: flex;
+  .navbar {
+    flex-direction: column;
     align-items: center;
-    gap: 10px; /* Espaço entre o ícone e o texto */
+  }
+  .navbar-brand {
+    font-size: 18px;
+    text-align: center;
+  }
+  .navbar-nav {
+    width: 100%;
+    text-align: center;
+  }
+  .navbar-nav .nav-link {
+    padding: 10px 0;
+  }
 }
 
-/* Ícones personalizados para os itens */
-.navbar .dropdown-item i {
-    color: #3a3836; /* Cor dos ícones */
-    font-size: 16px;
+footer {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999;
 }
 
-/* Efeito hover */
-.navbar .dropdown-item:hover {
-    background: #7db180; /* Cor verde mais escura no hover */
-    color: #ffffff;
-}
-
-/* Setinha do dropdown */
-.navbar .dropdown-toggle::after {
-    margin-left: 8px;
-    vertical-align: middle;
-}
-/* Estilos gerais */
 body {
   font-family: 'Montserrat', sans-serif;
   background: #f7f7f7;
   margin: 0;
   padding: 0;
+  padding-bottom: 70px; /* Ajuste o valor para compensar a altura do rodapé fixo */
+  min-height: 100vh; /* Garante que a altura da página ocupe toda a tela */
 }
 
-/* Container principal */
+.container {
+  padding-bottom: 20px; /* Adiciona um pequeno espaço entre o conteúdo e o rodapé */
+}
+
+.navbar .dropdown-menu {
+  background: #b4dfb6;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
+}
+
+.navbar .dropdown-item {
+  color: #333;
+  padding: 10px 20px;
+  transition: background 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .dropdown-item i {
+  color: #3a3836;
+  font-size: 16px;
+}
+
+.navbar .dropdown-item:hover {
+  background: #7db180;
+  color: #ffffff;
+}
+
+.navbar .dropdown-toggle::after {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 .relatorio-container {
   max-width: 800px;
   margin: 50px auto;
@@ -154,7 +141,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Caixa de informações */
 .info-box {
   background-color: #e0f7fa;
   padding: 10px;
@@ -168,7 +154,6 @@ body {
   margin: 0;
 }
 
-/* Formulário */
 .relatorio-form {
   display: flex;
   flex-direction: column;
@@ -204,7 +189,6 @@ select {
   gap: 15px;
 }
 
-/* Botões */
 .btn-submit {
   background-color: #00796b;
   color: #fff;
@@ -232,4 +216,44 @@ select {
 
 .btn-pdf:hover {
   background-color: #01579b;
+}
+
+/* Estilos da Página Inicial */
+.display-4 {
+  font-weight: bold;
+  color: #66BB6A;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+#thumbs-up {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }

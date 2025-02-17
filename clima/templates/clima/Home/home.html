@@ -6,7 +6,6 @@
 
 {% block content %}
   <div class="container mt-5">
-    <!-- Cabeçalho -->
     <div class="row text-center mb-5">
       <div class="col-md-12">
         <h1 class="display-4 text-success">Bem-vindo ao IFS Monitor!</h1>
@@ -14,74 +13,45 @@
       </div>
     </div>
 
-    <!-- Blocos informativos -->
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <div class="card shadow-sm border-success">
-          <div class="card-body text-center">
-            <i class="fas fa-thermometer-half fa-3x text-success"></i>
-            <h5 class="card-title">Monitoramento de Sensores</h5>
-            <p class="card-text">Acompanhe os sensores em tempo real e verifique o status de cada um. Dados como temperatura e umidade são analisados constantemente.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card shadow-sm border-primary">
-          <div class="card-body text-center">
-            <i class="fas fa-wrench fa-3x text-primary"></i>
-            <h5 class="card-title">Desempenho Otimizado</h5>
-            <p class="card-text">O IFS Monitor otimiza o consumo de energia e recursos, garantindo que os sensores funcionem com o máximo desempenho e eficiência.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card shadow-sm border-warning">
-          <div class="card-body text-center">
-            <i class="fas fa-users fa-3x text-warning"></i>
-            <h5 class="card-title">Acessibilidade e Controle</h5>
-            <p class="card-text">O sistema oferece uma interface acessível para usuários de diferentes níveis, permitindo que qualquer pessoa possa monitorar e controlar os sensores com facilidade.</p>
-          </div>
-        </div>
+    <div class="row text-center mb-5">
+      <div class="col-md-12">
+        <img src="{% static 'imagens/logo.png' %}" alt="Logo IFS Monitor" class="img-fluid" style="max-width: 200px;">
       </div>
     </div>
 
-    <!-- Texto adicional para tornar a página mais interativa -->
     <div class="row mb-5">
       <div class="col-md-12 text-center">
         <h3 class="text-primary">Por que escolher o IFS Monitor?</h3>
-        <p class="text-muted">Nosso sistema foi projetado para ser simples, eficiente e altamente confiável. A tecnologia por trás do IFS Monitor garante que você sempre tenha as informações necessárias para tomar decisões rápidas e precisas.  </p>
+        <p class="text-muted">Nosso sistema foi projetado para ser simples, eficiente e altamente confiável. A tecnologia por trás do IFS Monitor garante que você sempre tenha as informações necessárias para tomar decisões rápidas e precisas.</p>
       </div>
     </div>
 
-    <!-- Imagem ilustrativa e destaque para chamada à ação -->
     <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card card-custom" style="background-image: url('{% static 'imagens/imagem4.jpg' %}')">
+          <div class="card-title">Acessibilidade e Controle</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card card-custom" style="background-image: url('{% static 'imagens/imagem3.jpg' %}')">
+          <div class="card-title">Monitoramento de Sensores</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card card-custom" style="background-image: url('{% static 'imagens/imagem1.jpg' %}')">
+          <div class="card-title">Relatórios Inteligentes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
       <div class="col-md-12 text-center">
-        <img src="{% static 'imagens/logo.png' %}" alt="Logo IFS Monitor" class="img-fluid" style="max-width: 200px;">
-        <h4 class="mt-4 text-dark">Explore as funcionalidades completas do sistema!</h4>
+        <h4 class="text-dark">Explore as funcionalidades completas do sistema!</h4>
         <p class="lead text-muted">Caso precise de mais informações ou queira explorar todas as funcionalidades do IFS Monitor, explore nosso sistema e descubra como ele pode otimizar seus ambientes.</p>
       </div>
     </div>
 
   </div>
-
-  <!-- Estilos personalizados -->
-  <style>
-    .card-body {
-      padding: 20px;
-    }
-    .card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
-    .display-4 {
-      font-weight: bold;
-      color: #66BB6A;
-    }
-  </style>
-
 {% endblock %}

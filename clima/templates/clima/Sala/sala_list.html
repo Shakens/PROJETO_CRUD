@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    {% if salas %}
+    {% if sala %}
       <table class="table table-striped">
         <thead class="table-light">
           <tr>
@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for sala in salas %}
+          {% for sala in sala %}
             <tr>
               <td>{{ sala.nome }}</td>
               <td>{{ sala.descricao }}</td>

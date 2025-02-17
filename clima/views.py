@@ -42,6 +42,7 @@ class TipoSensorUpdateView(UpdateView):
 class TipoSensorDetailView(DetailView):
     model = TipoSensor
     template_name = "clima/TipoSensor/tipo_sensor_detail.html"
+    context_object_name = "tipo_sensor"
 
 class TipoSensorDeleteView(DeleteView):
     model = TipoSensor
@@ -154,14 +155,14 @@ class SensorFisicoDetailView(DetailView):
 
 class SensorFisicoDeleteView(DeleteView):
     model = SensorFisico
-    template_name = 'clima/SensorFisico/sensor_fisico_confirm_delete.html'
+    template_name = 'clima/SensorFisico/sensor_fisico_delete.html'
     success_url = reverse_lazy('sensor_fisico_list')
 
 # ===================== Views para Sensor Lógico =====================
 class SensorLogicoListView(ListView):
     model = SensorLogico
     template_name = "clima/SensorLogico/sensor_logico_list.html"
-    context_object_name = "sensor_logico"
+    context_object_name = "sensor_logicos" 
 
 class SensorLogicoCreateView(CreateView):
     model = SensorLogico
@@ -177,12 +178,13 @@ class SensorLogicoUpdateView(UpdateView):
 
 class SensorLogicoDetailView(DetailView):
     model = SensorLogico
-    template_name = "clima/SensorLogico/sensor_logico_detail.html"
-    context_object_name = "sensor_logico"
+    template_name = 'clima/SensorLogico/sensor_logico_detail.html'
+    context_object_name = 'sensor_logico'
+
 
 class SensorLogicoDeleteView(DeleteView):
     model = SensorLogico
-    template_name = "clima/SensorLogico/sensor_logico_confirm_delete.html"
+    template_name = "clima/SensorLogico/sensor_logico_delete.html"
     success_url = reverse_lazy("sensor_logico_list")
 
 # ===================== Views para Orientação =====================
