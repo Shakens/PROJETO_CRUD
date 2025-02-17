@@ -211,10 +211,15 @@ class SensorLogicoDeleteView(DeleteView):
     success_url = reverse_lazy("sensor_logico_list")
 
 # ===================== Views para Orientação =====================
+
 class OrientacaoListView(ListView):
     model = Orientacao
     template_name = 'clima/Orientacao/orientacao_list.html'
     context_object_name = 'orientacoes'
+
+    def get_queryset(self):
+        return Orientacao.objects.all().order_by('id')
+
 
 class OrientacaoCreateView(CreateView):
     model = Orientacao
@@ -236,7 +241,9 @@ class OrientacaoDetailView(DetailView):
 class OrientacaoDeleteView(DeleteView):
     model = Orientacao
     template_name = 'clima/Orientacao/orientacao_delete.html'
+    context_object_name = 'orientacao'
     success_url = reverse_lazy('orientacao_list')
+
 
 # ===================== Views para Relatorio =====================
 class RelatorioListView(ListView):

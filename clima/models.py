@@ -22,7 +22,7 @@ class Sala(models.Model):
     nome = models.CharField(max_length=150, null=False)
     sigla = models.CharField(max_length=10, unique=True, null=False)
     id_pavimento = models.ForeignKey('Pavimento', on_delete=models.RESTRICT, null=True, db_column='id_pavimento')
-    id_orientacao = models.ForeignKey('Orientacao', on_delete=models.RESTRICT, null=True, db_column='id_orientacao')
+    id_orientacao = models.ForeignKey('Orientacao', on_delete=models.CASCADE, null=True, db_column='id_orientacao')
 
     class Meta:
         db_table = 'tb_sala'  # Nome exato da tabela

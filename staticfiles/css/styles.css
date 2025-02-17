@@ -1,0 +1,259 @@
+/* Estilo para a barra de navegação (header) */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #66BB6A; /* Verde claro */
+  transition: background-color 0.5s ease;
+  padding: 10px 20px;
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-nav .nav-link i {
+  margin-right: 8px;
+}
+
+.navbar-nav .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: #a4c9aa;
+  border-radius: 5px;
+}
+
+.navbar-brand-container img {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+  .navbar-brand {
+    font-size: 18px;
+    text-align: center;
+  }
+  .navbar-nav {
+    width: 100%;
+    text-align: center;
+  }
+  .navbar-nav .nav-link {
+    padding: 10px 0;
+  }
+}
+
+footer {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 70px; /* Ajuste o valor para compensar a altura do rodapé fixo */
+  min-height: 100vh; /* Garante que a altura da página ocupe toda a tela */
+}
+
+.container {
+  padding-bottom: 20px; /* Adiciona um pequeno espaço entre o conteúdo e o rodapé */
+}
+
+.navbar .dropdown-menu {
+  background: #b4dfb6;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
+}
+
+.navbar .dropdown-item {
+  color: #333;
+  padding: 10px 20px;
+  transition: background 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .dropdown-item i {
+  color: #3a3836;
+  font-size: 16px;
+}
+
+.navbar .dropdown-item:hover {
+  background: #7db180;
+  color: #ffffff;
+}
+
+.navbar .dropdown-toggle::after {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.relatorio-container {
+  max-width: 800px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.info-box {
+  background-color: #e0f7fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.info-box p {
+  font-size: 18px;
+  color: #00796b;
+  margin: 0;
+}
+
+.relatorio-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+label {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-submit {
+  background-color: #00796b;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #004d40;
+}
+
+.btn-pdf {
+  background-color: #0288d1;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pdf:hover {
+  background-color: #01579b;
+}
+
+/* Estilos da Página Inicial */
+.display-4 {
+  font-weight: bold;
+  color: #66BB6A;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+#thumbs-up {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
