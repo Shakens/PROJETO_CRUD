@@ -4,29 +4,24 @@
 
 {% block content %}
   <div class="table-responsive">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Orientações</h1>
-      <div>
-        <a href="{% url 'orientacao_create' %}" class="btn btn-primary">
-          <i class="fas fa-plus-circle"></i> Adicionar Nova Orientação
-        </a>
-      </div>
     </div>
 
     {% if orientacoes %}
       <table class="table table-striped">
         <thead class="table-light">
           <tr>
-            <th scope="col">Título</th>
-            <th scope="col">Descrição</th>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
             <th scope="col" class="text-end">Ações</th>
           </tr>
         </thead>
         <tbody>
           {% for orientacao in orientacoes %}
             <tr>
-              <td>{{ orientacao.titulo }}</td>
-              <td>{{ orientacao.descricao }}</td>
+              <td>{{ orientacao.id }}</td>
+              <td>{{ orientacao.nome }}</td>
               <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
                   <a href="{% url 'orientacao_detail' pk=orientacao.pk %}" class="btn btn-sm btn-info">
@@ -45,7 +40,15 @@
         </tbody>
       </table>
     {% else %}
-      <p> Não há orientações cadastradas.</p>
+      <p>Não há orientações cadastradas.</p>
     {% endif %}
+
+    <!-- ✅ Botão igual ao de Salas -->
+    <div class="d-flex justify-content-center mt-4">
+      <a href="{% url 'orientacao_create' %}" class="btn btn-lg btn-success">
+        <i class="fas fa-plus-circle"></i> Adicionar Orientação
+      </a>
+    </div>
+
   </div>
 {% endblock %}

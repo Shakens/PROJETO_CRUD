@@ -1,19 +1,26 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Orientação</title>
-</head>
-<body>
-    <h1>Excluir Orientação</h1>
-    <p>Tem certeza que deseja excluir a orientação: <strong>{{ orientacao.titulo }}</strong>?</p>
-    
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Confirmar Exclusão</button>
-    </form>
+{% extends "base.html" %}
 
-    <a href="{% url 'orientacao_list' %}">Cancelar</a>
-</body>
-</html>
+{% block page_title %}Excluir Orientação{% endblock page_title %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="h2">Excluir Orientação</h1>
+    <div class="alert alert-danger" role="alert">
+      <strong>Tem certeza de que deseja excluir esta orientação?</strong><br>
+      Título: <strong>{{ orientacao.titulo }}</strong><br>
+      Descrição: {{ orientacao.descricao }}<br>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'orientacao_list' %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <button type="submit" class="btn btn-danger">
+          <i class="fas fa-trash-alt"></i> Confirmar Exclusão
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

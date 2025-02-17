@@ -102,12 +102,13 @@ urlpatterns = [
     path("orientacao/delete/<int:pk>/", OrientacaoDeleteView.as_view(), name="orientacao_delete"),
 
     # =================== Rota do Relatório ===================
-    path("relatorio/", RelatorioListView.as_view(), name="relatorio_list"),
-    path("relatorio/create/", RelatorioCreateView.as_view(), name="relatorio_create"),
-    path("relatorio/update/<int:pk>/", RelatorioUpdateView.as_view(), name="relatorio_update"),
-    path("relatorio/detail/<int:pk>/", RelatorioDetailView.as_view(), name="relatorio_detail"),
-    path("relatorio/delete/<int:pk>/", RelatorioDeleteView.as_view(), name="relatorio_delete"),
-    path('relatorio/pdf/', views.gerar_relatorio, name='gerar_relatorio_pdf'),
+    path("relatorio/", views.RelatorioListView.as_view(), name="relatorio_list"),
+    path("relatorio/create/", views.RelatorioCreateView.as_view(), name="relatorio_create"),
+    path("relatorio/update/<int:pk>/", views.RelatorioUpdateView.as_view(), name="relatorio_update"),
+    path("relatorio/detail/<int:pk>/", views.RelatorioDetailView.as_view(), name="relatorio_detail"),
+    path("relatorio/delete/<int:pk>/", views.RelatorioDeleteView.as_view(), name="relatorio_delete"),
+    path("relatorio/pdf/", views.gerar_relatorio, name="gerar_relatorio_pdf"),
+
 
     # =================== Rotas para Leitura Sensor ===================
     path("leitura-sensor/create/<int:pk>/leitura", LeituraSensorCreateView.as_view(), name="leitura_sensor_create"),  # Adicionando a rota para criação

@@ -48,7 +48,13 @@
     {% else %}
       <p>Não há sensores físicos cadastrados.</p>
     {% endif %}
-
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
     <!-- Botão "Adicionar Sensor Físico" na parte inferior -->
     <div class="d-flex justify-content-center mt-4">
       <a href="{% url 'sensor_fisico_create' %}" class="btn btn-lg btn-success">
