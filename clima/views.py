@@ -169,6 +169,17 @@ class SensorFisicoDeleteView(DeleteView):
     model = SensorFisico
     template_name = 'clima/SensorFisico/sensor_fisico_delete.html'
     success_url = reverse_lazy('sensor_fisico_list')
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        # Verifica se o SensorFisico está vinculado a algum SensorLogico
+        if SensorLogico.objects.filter(sensor_fisico=self.object).exists():
+            messages.error(request, "❌ Este Sensor Físico não pode ser excluído porque está vinculado a um ou mais Sensores Lógicos.")
+            return redirect('sensor_fisico_list')  # Redireciona para a lista de sensores
+
+        # Se não houver SensorLogico vinculado, exclui o SensorFisico
+        return super().post(request, *args, **kwargs)
 
 # ===================== Views para Sensor Lógico =====================
 class SensorLogicoListView(ListView):
