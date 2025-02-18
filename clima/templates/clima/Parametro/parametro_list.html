@@ -1,16 +1,11 @@
 {% extends "base.html" %}
 
-{% block page_title %}Lista de Parâmetros{% endblock page_title %}
+{% block page_title %}Lista de Parâmetros{% endblock %}
 
 {% block content %}
   <div class="table-responsive">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Parâmetros</h1>
-      <div>
-        <a href="{% url 'parametro_create' %}" class="btn btn-primary">
-          <i class="fas fa-plus-circle"></i> Adicionar Parâmetro
-        </a>
-      </div>
     </div>
 
     {% if parametros %}
@@ -43,11 +38,21 @@
                 </div>
               </td>
             </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center">Nenhum parâmetro encontrado.</td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
       <p>Não há parâmetros cadastrados.</p>
     {% endif %}
+    
+    <div class="d-flex justify-content-center mt-4">
+      <a href="{% url 'parametro_create' %}" class="btn btn-lg btn-success">
+        <i class="fas fa-plus-circle"></i> Adicionar Parâmetro
+      </a>
+    </div>
   </div>
 {% endblock %}

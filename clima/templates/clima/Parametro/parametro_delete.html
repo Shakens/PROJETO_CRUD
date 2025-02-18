@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block page_title %}Excluir Parâmentro{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Excluir Parâmentro</strong></h1>
+  </div>
+  <div class="alert alert-danger" role="alert">
+    Tem certeza de que deseja excluir o Parâmentro <strong>{{parametro.parametro}}</strong>?
+  </div>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a href="{% url "pavimento_list" %}" class="btn btn-primary">Cancelar</a>
+  </form>
+{% endblock content %}
