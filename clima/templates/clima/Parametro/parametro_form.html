@@ -3,27 +3,6 @@
 {% block page_title %}Formulário de Parâmetro{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    {% if parametro.pk %}
-      <h1 class="h2">Atualizar Parâmetro</h1>
-    {% else %}
-      <h1 class="h2">Cadastrar Parâmetro</h1>
-    {% endif %}
-  </div>
-
-  <form method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    
-    <!-- Botões centralizados na parte inferior -->
-    <div class="d-flex justify-content-center mt-4 gap-3">
-      <button type="submit" class="btn btn-success">Salvar</button>
-      <a href="{% url 'parametro_list' %}" class="btn btn-secondary">Cancelar</a>
-    </div>
-  </form>
-{% endblock content %}
-=======
     <div class="container">
         <h1>{% if parametro %}Editar Parâmetro{% else %}Novo Parâmetro{% endif %}</h1>
         <form method="post">
@@ -51,4 +30,3 @@
         </form>
     </div>
 {% endblock %}
->>>>>>> 3f24bbad4917b5dcecd3eb075032d2fb7510c149
