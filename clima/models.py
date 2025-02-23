@@ -87,8 +87,6 @@ class SensorLogico(models.Model):
         return f"{self.descricao} ({self.sensor_fisico.nome})"
 
 
-
-
 # Modelo Orientacao
 class Orientacao(models.Model):
     id = models.AutoField(primary_key=True)
@@ -99,21 +97,6 @@ class Orientacao(models.Model):
 
     def __str__(self):
         return self.nome
-
-
-# Modelo Relatorio
-class Relatorio(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do Relatório")
-    descricao = models.TextField(verbose_name="Descrição", blank=True, null=True)
-
-    class Meta:
-        db_table = 'tb_relatorio'  # Define o nome exato da tabela
-        verbose_name = "Relatório"
-        verbose_name_plural = "Relatórios"
-
-    def __str__(self):
-        return self.nome
-
 
 # Modelo LeituraSensor
 class LeituraSensor(models.Model):

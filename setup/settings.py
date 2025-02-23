@@ -67,7 +67,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # Adicione aqui o diretório onde os templates personalizados estão, se necessário
-            BASE_DIR / 'templates/clima',
+            BASE_DIR / 'clima/templates/clima',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mydb',
         'USER': 'root',
-        'PASSWORD': 'Brunna@2020*',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',  # ou o endereço do seu servidor de banco
         'PORT': '3306',  # geralmente é a porta padrão do MySQL
     }

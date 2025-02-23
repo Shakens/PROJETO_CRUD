@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Relatório PDF - {{ relatorio.id }}</h1>
+    <p>Data de Criação: {{ relatorio.data_criacao }}</p>
+
+    <h3>Detalhes do Relatório</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sensor</th>
+                <th>Valor</th>
+                <th>Data/Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leitura_sensor in relatorio.leituras_sensores.all %}
+                <tr>
+                    <td>{{ leitura_sensor.sensor_logico.nome }}</td>
+                    <td>{{ leitura_sensor.valor }}</td>
+                    <td>{{ leitura_sensor.leitura.data_hora }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

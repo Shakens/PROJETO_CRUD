@@ -23,7 +23,7 @@
             <tr>
               <td>{{ sensor.descricao }}</td>
               <td>{{ sensor.sensor_fisico.nome }}</td>
-              <td>{{ sensor_logico.tipo}}</td>
+              <td>{{ sensor.tipo}}</td>
               <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">
                   <a href="{% url 'sensor_logico_detail' pk=sensor.pk %}" class="btn btn-sm btn-info">

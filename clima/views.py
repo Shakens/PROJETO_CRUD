@@ -1,15 +1,19 @@
 from django.shortcuts import render
+from django.db import models
+from django.db.models import Q, Avg
+from datetime import timedelta
+from django.utils import timezone
+from django.views import View
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio, LeituraSensor, Leitura
-from .forms import TipoSensorForm, SalaForm, ParametroForm, PavimentoForm, SensorFisicoForm, SensorLogicoForm, OrientacaoForm, LeituraSensorForm, RelatorioForm, LeituraForm
+from .models import TipoSensor, Sala, Parametro, Pavimento, SensorFisico, SensorLogico, Orientacao, LeituraSensor, Leitura
+from .forms import TipoSensorForm, SalaForm, ParametroForm, PavimentoForm, SensorFisicoForm, SensorLogicoForm, OrientacaoForm
 
 # ===================== Dashboard =====================
 def dashboard_view(request):
@@ -244,79 +248,148 @@ class OrientacaoDeleteView(DeleteView):
     context_object_name = 'orientacao'
     success_url = reverse_lazy('orientacao_list')
 
+# ===================== Views para Relatórios =====================
+def relatorio_list(request):
+    # Obter os filtros da URL
+    sala = request.GET.get('sala')
+    tipo_sensor = request.GET.get('tipo_sensor')
+    data_inicial = request.GET.get('data_inicial')
+    data_final = request.GET.get('data_final')
 
-# ===================== Views para Relatorio =====================
-class RelatorioListView(ListView):
-    model = Relatorio
-    template_name = 'clima/Relatorio/relatorio_list.html'
-    context_object_name = 'relatorios'
+    leituras = LeituraSensor.objects.all()
 
-class RelatorioCreateView(CreateView):
-    model = Relatorio
-    form_class = RelatorioForm
-    template_name = 'clima/Relatorio/relatorio_form.html'
-    success_url = reverse_lazy('relatorio_list')
+    if sala:
+        leituras = leituras.filter(leitura__sala_id=sala)
+    if tipo_sensor:
+        leituras = leituras.filter(sensor_logico__tipo_sensor_id=tipo_sensor)
+    if data_inicial:
+        leituras = leituras.filter(leitura__data_hora__gte=data_inicial)
+    if data_final:
+        leituras = leituras.filter(leitura__data_hora__lte=data_final)
 
-class RelatorioUpdateView(UpdateView):
-    model = Relatorio
-    form_class = RelatorioForm
-    template_name = 'clima/Relatorio/relatorio_form.html'
-    success_url = reverse_lazy('relatorio_list')
+    return render(request, 'relatorio/relatorio_list.html', {'leituras': leituras})
 
-class RelatorioDetailView(DetailView):
-    model = Relatorio
-    template_name = 'clima/Relatorio/relatorio_detail.html'
-    context_object_name = 'relatorio'
+class RelatorioFormView(View):
+    def get(self, request, *args, **kwargs):
+        # Recuperando os parâmetros da URL
+        sala_id = request.GET.get('sala')
+        tipo_sensor_id = request.GET.get('tipo_sensor')
+        data_inicial = request.GET.get('data_inicial')
+        data_final = request.GET.get('data_final')
 
-class RelatorioDeleteView(DeleteView):
-    model = Relatorio
-    template_name = 'clima/Relatorio/relatorio_delete.html'
-    success_url = reverse_lazy('relatorio_list')
+        # Inicializando a consulta para as leituras
+        leituras = LeituraSensor.objects.all()
 
-# ===================== Views para Leitura Sensor =====================
-class LeituraSensorListView(ListView):
-    model = LeituraSensor
-    template_name = 'leitura_sensor/leitura_sensor_list.html'
-    context_object_name = 'leituras_sensores'
+        # Aplicando filtros conforme os parâmetros passados
+        if sala_id:
+            leituras = leituras.filter(leitura__sala_id=sala_id)
+        if tipo_sensor_id:
+            leituras = leituras.filter(sensor_logico__tipo_sensor_id=tipo_sensor_id)
+        if data_inicial:
+            leituras = leituras.filter(leitura__data_hora__gte=data_inicial)
+        if data_final:
+            leituras = leituras.filter(leitura__data_hora__lte=data_final)
 
-class LeituraSensorCreateView(CreateView):
-    model = LeituraSensor
-    form_class = LeituraSensorForm
-    template_name = 'leitura_sensor/form.html'
-    success_url = reverse_lazy('listar_leitura_sensor')
+        # Se necessário, recuperar objetos relacionados, como salas ou tipo de sensor
+        salas = Sala.objects.all()
+        tipos_sensores = TipoSensor.objects.all()
 
-    def form_valid(self, form):
-        return super().form_valid(form)
+        # Passando os dados para o template
+        context = {
+            'leituras': leituras,
+            'salas': salas,
+            'tipos_sensores': tipos_sensores,
+            'sala_id': sala_id,
+            'tipo_sensor_id': tipo_sensor_id,
+            'data_inicial': data_inicial,
+            'data_final': data_final,
+        }
+        
+        return render(request, 'relatorios/relatorio_list.html', context)
+    
+ #--------------
+def gerar_relatorio_historico(sala_id, data_inicio, data_fim):
+    return LeituraSensor.objects.filter(
+        Q(leitura__sala_id=sala_id) &
+        Q(leitura__data_hora__gte=data_inicio) &
+        Q(leitura__data_hora__lte=data_fim)
+    ).order_by('leitura__data_hora')
+#---------------------------
+def sensores_criticos():
+    # Definir limites aceitáveis de temperatura/umidade, por exemplo:
+    limite_min = 20.0
+    limite_max = 25.0
 
-# ===================== Views para Leitura =====================
-class LeituraCreateView(CreateView):
-    model = Leitura
-    form_class = LeituraForm
-    template_name = 'clima/Leitura/leitura_form.html'
-    success_url = reverse_lazy('leitura_list')
+    # Consultar os sensores cujos valores de leitura estão fora desses limites
+    sensores_criticos = LeituraSensor.objects.filter(
+        Q(valor__lt=limite_min) | Q(valor__gt=limite_max)
+    ).values('sensor_logico').annotate(contagem=models.Count('id')).order_by('-contagem')
 
-    def form_valid(self, form):
-        sala_id = self.kwargs['sala_id']
-        sala = get_object_or_404(Sala, id=sala_id)
-        form.instance.sala = sala
-        form.instance.data_hora = timezone.now()
-        return super().form_valid(form)
+    return sensores_criticos
+#----------------------------
+def relatorio_temperatura_umidade_agrupada(intervalo_minutos):
+    # Definir o intervalo de tempo
+    tempo_agrupado = timezone.now() - timedelta(minutes=intervalo_minutos)
 
-    def get_success_url(self):
-        return reverse_lazy('listar_leitura')
+    # Consultar leituras agrupadas por intervalo de tempo
+    relatorio = LeituraSensor.objects.filter(
+        leitura__data_hora__gte=tempo_agrupado
+    ).values('leitura__data_hora').annotate(
+        media_valor=Avg('valor')
+    ).order_by('leitura__data_hora')
+
+    return relatorio
 
 # ===================== Gerar Relatório em PDF =====================
-def gerar_relatorio(request):
+
+def render_pdf(request):
+    # Obter os filtros da URL
+    sala = request.GET.get('sala')
+    tipo_sensor = request.GET.get('tipo_sensor')
+    data_inicial = request.GET.get('data_inicial')
+    data_final = request.GET.get('data_final')
+
+    leituras = LeituraSensor.objects.all()
+
+    if sala:
+        leituras = leituras.filter(leitura__sala_id=sala)
+    if tipo_sensor:
+        leituras = leituras.filter(sensor_logico__tipo_sensor_id=tipo_sensor)
+    if data_inicial:
+        leituras = leituras.filter(leitura__data_hora__gte=data_inicial)
+    if data_final:
+        leituras = leituras.filter(leitura__data_hora__lte=data_final)
+
+    # Gerar o PDF com o canvas
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="relatorio_leituras.pdf"'
-    p = canvas.Canvas(response, pagesize=letter)
+    response['Content-Disposition'] = 'inline; filename="relatorio.pdf"'
+
+    p = canvas.Canvas(response)
+
     p.setFont("Helvetica", 12)
-    p.drawString(100, 750, "Relatório de Leituras")
-    leituras = Leitura.objects.all()
-    y_position = 730
+
+    # Adicionando título ao PDF
+    p.drawString(250, 800, "Relatório de Leituras")
+
+    # Definindo os headers
+    p.drawString(50, 760, "ID")
+    p.drawString(100, 760, "Sala")
+    p.drawString(200, 760, "Sensor")
+    p.drawString(300, 760, "Valor")
+    p.drawString(400, 760, "Data e Hora")
+
+    y_position = 740  # Começando logo abaixo dos cabeçalhos
+
+    # Preenchendo os dados das leituras
     for leitura in leituras:
-        p.drawString(100, y_position, f"Data: {leitura.data_hora} | Valor: {leitura.valor}")
-        y_position -= 20
+        p.drawString(50, y_position, str(leitura.id))
+        p.drawString(100, y_position, leitura.leitura.sala.nome)
+        p.drawString(200, y_position, leitura.sensor_logico.nome)
+        p.drawString(300, y_position, str(leitura.valor))
+        p.drawString(400, y_position, str(leitura.leitura.data_hora))
+        y_position -= 20  # Diminuindo a posição Y para a próxima linha
+
     p.showPage()
     p.save()
+
     return response

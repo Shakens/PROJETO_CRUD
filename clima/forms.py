@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import TipoSensor, Sala, Parametro, LeituraSensor, Pavimento, SensorFisico, SensorLogico, Orientacao, Relatorio, Leitura  # Incluindo Orientacao
+from .models import TipoSensor, Sala, Parametro, LeituraSensor, Pavimento, SensorFisico, SensorLogico, Orientacao, Leitura  # Incluindo Orientacao
 
 # Formulário para TipoSensor
 class TipoSensorForm(forms.ModelForm):
@@ -128,33 +128,6 @@ class OrientacaoForm(forms.ModelForm):
         if "inválido" in nome.lower():
             raise forms.ValidationError("O nome da orientação não pode conter a palavra 'inválido'.")
         return nome
-
-
-# Formulário para Relatorio
-class RelatorioForm(forms.Form):
-    nome_relatorio = forms.CharField(max_length=100)
-    descricao = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}))
-    data_inicio = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-    data_fim = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-
-    def clean_nome_relatorio(self):
-        nome_relatorio = self.cleaned_data.get('nome_relatorio')
-        if 'inválido' in nome_relatorio.lower():
-            raise forms.ValidationError("O nome do relatório não pode conter a palavra 'inválido'.")
-        return nome_relatorio
-
-    def clean_data_inicio(self):
-        data_inicio = self.cleaned_data.get('data_inicio')
-        if data_inicio > timezone.now():
-            raise forms.ValidationError("A data de início não pode ser no futuro.")
-        return data_inicio
-
-    def clean_data_fim(self):
-        data_fim = self.cleaned_data.get('data_fim')
-        if data_fim > timezone.now():
-            raise forms.ValidationError("A data de fim não pode ser no futuro.")
-        return data_fim
-
 
 # Formulário para LeituraSensor
 class LeituraSensorForm(forms.ModelForm):

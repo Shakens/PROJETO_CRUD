@@ -1,10 +1,10 @@
-<!-- relatorio_form.html -->
 {% extends 'base.html' %}
+
 {% block content %}
-  <h2>{% if object %}Editar{% else %}Criar{% endif %} Relatório</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
-  </form>
+    <h1>{% if relatorio %}Editar{% else %}Criar{% endif %} Relatório</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% if relatorio %}Salvar Alterações{% else %}Criar Relatório{% endif %}</button>
+    </form>
 {% endblock %}

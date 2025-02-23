@@ -1,7 +1,6 @@
 .env
 .venv
-settings.py
-
+SensorFisico/
 __pycache__/
 *.pyc
 

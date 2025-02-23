@@ -30,154 +30,59 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Gráfico de Temperatura -->
-    <div class="container mt-4">
-        <h2>Gráfico de Temperatura</h2>
+        <!-- Seção de Gráficos -->
+        <div class="container mt-4">
+            <h2>Gráficos de Sensores</h2>
 
-        <!-- Definindo um tamanho fixo para o gráfico -->
-        <canvas id="graficoTemperatura" style="width: 100px; height: 100px;"></canvas> <!-- Quadrado de 300x300px -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Temperatura</h4>
+                    <canvas id="graficoTemperatura"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <h4>Umidade</h4>
+                    <canvas id="graficoUmidade"></canvas>
+                </div>
+            </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Dados de Temperatura
-            var labels = {{ labels|safe }};  // Labels dos dados de temperatura
-            var valores = {{ valores|safe }};  // Valores das medições de temperatura
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                // Dados de Temperatura e Umidade
+                var labels = JSON.parse('{{ labels|escapejs }}');
+                var temperaturas = JSON.parse('{{ temperaturas|escapejs }}');
+                var umidades = JSON.parse('{{ umidades|escapejs }}');
 
-            // Gráfico de Temperatura usando Chart.js
-            var ctx = document.getElementById('graficoTemperatura').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,  // Labels (data)
-                    datasets: [{
-                        label: 'Temperatura (°C)',
-                        data: valores,  // Valores das temperaturas
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,  // Garantindo que o gráfico se mantenha proporcional
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Data'
-                            }
+                // Função para criar gráfico
+                function criarGrafico(id, label, data, cor) {
+                    var ctx = document.getElementById(id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: label,
+                                data: data.length > 0 ? data : [0],  // Caso não haja dados, passamos um valor padrão de 0
+                                backgroundColor: cor + '0.2)',
+                                borderColor: cor + '1)',
+                                borderWidth: 2
+                            }]
                         },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Temperatura (°C)'
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { title: { display: true, text: 'Data' } },
+                                y: { title: { display: true, text: label } }
                             }
                         }
-                    }
+                    });
                 }
-            });
-        </script>
-    </div>
-{% endblock %}
-{% extends "base.html" %}
 
-{% block page_title %}Dashboard{% endblock %}
-
-{% block content %}
-    <div class="container dashboard-content">
-        <h1>Dashboard</h1>
-        <p>Bem-vindo ao painel de controle!</p>
-
-        <div class="row">
-            <!-- Card para os Sensores -->
-            <div class="col-md-6">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-header">Sensores Cadastrados</div>
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {% for sensor in sensores %}
-                                {{ sensor.nome }}<br> <!-- Exibe o nome de cada sensor -->
-                            {% empty %}
-                                Nenhum sensor cadastrado.
-                            {% endfor %}
-                        </h5>
-                        <p class="card-text">Lista de sensores cadastrados no sistema.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card para as Salas -->
-            <div class="col-md-6">
-                <div class="card text-white bg-secondary mb-3">
-                    <div class="card-header">Salas Cadastradas</div>
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {% for sala in salas %}
-                                {{ sala.nome }}<br> <!-- Exibe o nome de cada sala -->
-                            {% empty %}
-                                Nenhuma sala cadastrada.
-                            {% endfor %}
-                        </h5>
-                        <p class="card-text">Lista de salas cadastradas no sistema.</p>
-                    </div>
-                </div>
-            </div>
+                // Criando os gráficos
+                criarGrafico('graficoTemperatura', 'Temperatura (°C)', temperaturas, 'rgba(255, 99, 132,');
+                criarGrafico('graficoUmidade', 'Umidade (%)', umidades, 'rgba(54, 162, 235,');
+            </script>
         </div>
-    </div>
-
-    <!-- Seção de Gráficos -->
-    <div class="container mt-4">
-        <h2>Gráficos de Sensores</h2>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Temperatura</h4>
-                <canvas id="graficoTemperatura"></canvas>
-            </div>
-            <div class="col-md-6">
-                <h4>Umidade</h4>
-                <canvas id="graficoUmidade"></canvas>
-            </div>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Dados de Temperatura e Umidade
-            var labels = {{ labels|safe }};
-            var temperaturas = {{ temperaturas|safe }};
-            var umidades = {{ umidades|safe }};
-
-            // Função para criar gráfico
-            function criarGrafico(id, label, data, cor) {
-                var ctx = document.getElementById(id).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: label,
-                            data: data.length > 0 ? data : [0],  // Caso não haja dados, passamos um valor padrão de 0
-                            backgroundColor: cor + '0.2)',
-                            borderColor: cor + '1)',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: { title: { display: true, text: 'Data' } },
-                            y: { title: { display: true, text: label } }
-                        }
-                    }
-                });
-            }
-
-            // Criando os gráficos
-            criarGrafico('graficoTemperatura', 'Temperatura (°C)', temperaturas, 'rgba(255, 99, 132,');
-            criarGrafico('graficoUmidade', 'Umidade (%)', umidades, 'rgba(54, 162, 235,');
-        </script>
     </div>
 {% endblock %}
