@@ -1,32 +1,24 @@
 {% extends "base.html" %}
 
-{% block page_title %}Formulário de Parâmetro{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}
+  <h1 class="h2">{{ parametro.pk|yesno:"Atualizar Parâmetro,Cadastrar Parâmetro" }}</h1>
+{% endblock page_title %}
 
 {% block content %}
-    <div class="container">
-        <h1>{% if parametro %}Editar Parâmetro{% else %}Novo Parâmetro{% endif %}</h1>
-        <form method="post">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="nome">Nome:</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="{{ parametro.nome }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="valor">Valor:</label>
-                <input type="number" class="form-control" id="valor" name="valor" value="{{ parametro.valor }}" required step="0.01">
-            </div>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ parametro.pk|yesno:"Atualizar Parâmetro,Cadastrar Parâmetro" }}</h1>
+  </div>
+  
+  <form method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
 
-            <div class="form-group">
-                <label for="descricao">Descrição:</label>
-                <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ parametro.descricao }}</textarea>
-            </div>
-           
-            <div class="d-flex justify-content-center mt-4 gap-3">
-                <button type="submit" class="btn btn-success">Salvar</button>
-                <a href="{% url 'parametro_list' %}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+    <!-- Botões centralizados na parte inferior -->
+    <div class="d-flex justify-content-center mt-4 gap-3">
+      <button type="submit" class="btn btn-success">Salvar</button>
+      <a href="{% url 'parametro_list' %}" class="btn btn-secondary">Cancelar</a>
     </div>
-{% endblock %}
+  </form>
+{% endblock content %}
