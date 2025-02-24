@@ -18,7 +18,6 @@
               <th scope="col">Descrição</th>
               <th scope="col" class="text-end">Ações</th>
             </tr>
-<<<<<<< HEAD
           </thead>
           <tbody>
             {% for parametro in parametros %}
@@ -40,23 +39,14 @@
                   </div>
                 </td>
               </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4" class="text-center">Nenhum parâmetro encontrado.</td>
+              </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-=======
-          {% empty %}
-            <tr>
-              <td colspan="4" class="text-center">Nenhum parâmetro encontrado.</td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="4" class="text-center">Nenhum parâmetro encontrado.</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
->>>>>>> 3f24bbad4917b5dcecd3eb075032d2fb7510c149
     {% else %}
       <p>Não há parâmetros cadastrados.</p>
     {% endif %}

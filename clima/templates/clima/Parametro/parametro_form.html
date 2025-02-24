@@ -2,9 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block page_title %}
-  <h1 class="h2">{{ parametro.pk|yesno:"Atualizar Parâmetro,Cadastrar Parâmetro" }}</h1>
-{% endblock page_title %}
+{% block page_title %}{{ parametro.pk|yesno:"Atualizar Parâmetro,Cadastrar Parâmetro" }}{% endblock %}
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -13,7 +11,13 @@
   
   <form method="POST">
     {% csrf_token %}
-    {{ form | crispy }}
+    {{ form|crispy }}
+
+    <!-- Campo Descrição -->
+    <div class="form-group">
+      <label for="id_descricao">Descrição</label>
+      <textarea class="form-control" id="id_descricao" name="descricao" required>{{ form.descricao.value }}</textarea>
+    </div>
 
     <!-- Botões centralizados na parte inferior -->
     <div class="d-flex justify-content-center mt-4 gap-3">
@@ -21,4 +25,4 @@
       <a href="{% url 'parametro_list' %}" class="btn btn-secondary">Cancelar</a>
     </div>
   </form>
-{% endblock content %}
+{% endblock %}
